@@ -27,7 +27,7 @@
   // its own spoke (tiny zigzag), so concepts never drift into a neighbouring session's
   // sector - the failure mode of an angular fan on dense (8+ session) maps.
   var maxC = data.sessions.reduce(function (m, s) { return Math.max(m, (s.concepts || []).length); }, 0);
-  var STEP = 92;                              // radial gap between chained concepts
+  var STEP = 150;                             // radial gap between chained concepts (must exceed node width so horizontal branches do not self-overlap)
   var R1 = Math.max(170, Math.round(26 * n)); // session ring
   var R2 = R1 + 150;                          // first concept ring
   var maxR = R2 + Math.max(0, maxC - 1) * STEP;
@@ -99,7 +99,7 @@
     var conceptEls = [];
     var px = sx, py = sy;                         // chain starts at the session node
     // narrow zigzag keeps the branch lively but inside a tight cone around the spoke
-    var JIT = Math.min(7, angleStep * 0.16);
+    var JIT = Math.min(5, angleStep * 0.12);
     cs.forEach(function (c, j) {
       var off = (j % 2 === 0 ? -JIT : JIT);
       var ca = (-90 + i * (360 / n) + off) * Math.PI / 180;

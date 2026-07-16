@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 4 · Recommendations - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 4 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 4 of 8</div>
+    <h1>Recommendations: <span class="accent">the machine that reads your taste</span></h1>
+    <p class="sub">Netflix, Amazon, Spotify and TikTok all run on the same quiet engine: a system that guesses what you will like from what people like you already liked. This session opens that engine - the two ways to recommend, the cold-start problem every new user creates, and the failure modes (filter bubbles, runaway engagement loops) that turn a helpful feature into a business risk. No code, no math - just the intuition and one live sandbox.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The engine behind your feed</h2>
+    </div>
+    <p class="lede">Sessions 2 and 3 built the machinery: neural nets that learn from examples, and embeddings that place things in a meaning-space. Recommendations are the first place you see that machinery earning its keep every single day. A recommender does not "understand" you - it notices that your behavior rhymes with other people's, and borrows their taste to fill in yours. That one trick powers a startling share of what you watch, buy, and hear. This session shows you how it works, where it breaks, and the single question a leader must keep asking: what are we optimizing for?</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The two recommendation strategies (collaborative filtering vs content-based) and why real systems blend them, a clear grip on the cold-start problem and how to design around it, and the literate wariness that separates a helpful recommender from a harmful one - filter bubbles, feedback loops, and the guardrail question "are we optimizing for satisfaction or just for time-on-screen?".
+    </div>
+  </section>
+
+  <!-- ============ PART 1: TWO WAYS ============ -->
+  <section class="section" id="two-ways">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the two strategies</span>
+      <h2>Two ways to recommend <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">There are two fundamentally different ways to guess what you will like. One looks at people; the other looks at items. Most products you use run both at once and blend the answers - but keeping them apart in your head is the key to understanding any recommender.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left: collaborative filtering matches you to a taste-twin user. Right: content-based matches items by their features.">
+        <style>
+          .cfT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .cfW { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .cfX { font: 400 12px Inter, sans-serif; fill: #1E1B2E; }
+          .cfM { font: 400 11.5px Inter, sans-serif; fill: #6B6785; }
+          .cfC { font: 700 13px Inter, sans-serif; fill: #053640; text-anchor: middle; }
+        </style>
+        <rect x="20" y="20" width="410" height="300" rx="16" fill="#EDE9FE"/>
+        <rect x="450" y="20" width="410" height="300" rx="16" fill="#EDE9FE"/>
+        <rect x="20" y="20" width="410" height="40" rx="16" fill="#6D28D9"/>
+        <rect x="450" y="20" width="410" height="40" rx="16" fill="#7C3AED"/>
+        <text class="cfT" x="225" y="46">Collaborative: people like you</text>
+        <text class="cfT" x="655" y="46">Content-based: items like this</text>
+        <!-- collaborative grid -->
+        <text class="cfM" x="120" y="88">a tiny ratings grid</text>
+        <text class="cfX" x="120" y="112">You</text>
+        <rect x="170" y="100" width="34" height="20" rx="4" fill="#7C3AED"/><text class="cfW" x="187" y="115" text-anchor="middle">5</text>
+        <rect x="210" y="100" width="34" height="20" rx="4" fill="#C4B5FD"/><text class="cfX" x="227" y="115" text-anchor="middle">?</text>
+        <rect x="250" y="100" width="34" height="20" rx="4" fill="#7C3AED"/><text class="cfW" x="267" y="115" text-anchor="middle">4</text>
+        <rect x="290" y="100" width="34" height="20" rx="4" fill="#C4B5FD"/><text class="cfX" x="307" y="115" text-anchor="middle">?</text>
+        <rect x="60" y="132" width="360" height="26" rx="6" fill="#06B6D4"/>
+        <text class="cfC" x="240" y="150">Taste-twin (rated the things you did the same way)</text>
+        <text class="cfX" x="120" y="184">Twin</text>
+        <rect x="170" y="172" width="34" height="20" rx="4" fill="#7C3AED"/><text class="cfW" x="187" y="187" text-anchor="middle">5</text>
+        <rect x="210" y="172" width="34" height="20" rx="4" fill="#4C1D95"/><text class="cfW" x="227" y="187" text-anchor="middle">5</text>
+        <rect x="250" y="172" width="34" height="20" rx="4" fill="#7C3AED"/><text class="cfW" x="267" y="187" text-anchor="middle">4</text>
+        <rect x="290" y="172" width="34" height="20" rx="4" fill="#4C1D95"/><text class="cfW" x="307" y="187" text-anchor="middle">4</text>
+        <text class="cfX" x="40" y="234">The twin loved the two you have</text>
+        <text class="cfX" x="40" y="252">not seen, so we recommend them</text>
+        <text class="cfM" x="40" y="286">Nobody described the items.</text>
+        <text class="cfM" x="40" y="304">The crowd's behavior did the work.</text>
+        <!-- content-based -->
+        <text class="cfM" x="655" y="88">match on item features</text>
+        <rect x="500" y="104" width="130" height="54" rx="10" fill="#4C1D95"/>
+        <text class="cfW" x="512" y="126">Liked: sci-fi</text>
+        <text class="cfW" x="512" y="146" style="font-weight:400;opacity:.9">1980s · space</text>
+        <rect x="680" y="104" width="130" height="54" rx="10" fill="#7C3AED"/>
+        <text class="cfW" x="692" y="126">Suggest:</text>
+        <text class="cfW" x="692" y="146" style="font-weight:400;opacity:.9">sci-fi · space</text>
+        <line x1="630" y1="131" x2="678" y2="131" stroke="#7C3AED" stroke-width="3" marker-end="url(#cfAr)"/>
+        <text class="cfX" x="500" y="196">Same genre, era, theme -&gt; similar item.</text>
+        <text class="cfX" x="500" y="230">No other users needed at all: works</text>
+        <text class="cfX" x="500" y="248">even for a brand-new, niche catalog.</text>
+        <text class="cfM" x="500" y="286">The item's own tags carry the signal.</text>
+        <text class="cfM" x="500" y="304">Weakness: it can only echo, not surprise.</text>
+        <defs>
+          <marker id="cfAr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#7C3AED" stroke-width="1.5"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>🔍 Click to zoom - people-similarity on the left, item-similarity on the right</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Collaborative vs content-based, and why blend<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Collaborative filtering</strong> uses the crowd's behavior: "people who rated things the way you did also liked X." It never needs to know what an item is about - only who liked what. This is the engine's heart.</li>
+          <li><strong>Content-based</strong> uses the item's own features: "you liked this sci-fi space thriller, here is another sci-fi space thriller." It leans on tags and embeddings (Session 3), not on other users.</li>
+          <li><strong>Each has a blind spot.</strong> Collaborative cannot help a brand-new item nobody has touched yet; content-based only ever echoes what you already like and rarely surprises you.</li>
+          <li><strong>So real systems blend both</strong> - and add popularity, recency, and business rules on top. When you hear "the algorithm", it is almost always a weighted mix, not one clean idea.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Spotify's Discover Weekly is the classic blend: collaborative filtering finds listeners whose playlists overlap yours and surfaces what they play that you have not heard, while content-style audio features keep the picks in a coherent mood. The magic feeling - "how did it know?" - is just your taste-twins, at scale.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Matrix factorization in one paragraph<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The famous engine under collaborative filtering is <strong>matrix factorization</strong>. Picture the giant grid of users-by-items, mostly empty (nobody rates everything). Factorization finds a small set of hidden "taste factors" - unnamed dials like "gritty vs cozy" or "mainstream vs cult" - such that every user is a blend of factors and every item is a blend of factors, and multiplying the two back together reproduces the ratings you do have and fills in the ones you do not. Nobody labels those factors; the math discovers them from the grid. It is the same move as embeddings (Session 3): compress messy behavior into a few meaningful numbers, then measure distance in that space.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: ENGINES + COLD START ============ -->
+  <section class="section" id="engines">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the daily engines &amp; a hard first day</span>
+      <h2>The engines you use daily + cold start <span class="tag concept">4 min live</span></h2>
+    </div>
+    <p class="lede">These are not products with recommendations bolted on - they are recommenders wearing a product. But every one of them faces the same awkward first moment: a brand-new user or a brand-new item, with no history to learn from. That is the cold-start problem, and how a company solves it shapes your very first experience.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Recommender-first products, and the cold-start problem<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Netflix</strong> ranks and reshuffles the whole home screen per person; <strong>Amazon</strong>'s "customers also bought" drives a huge slice of the cart; <strong>Spotify</strong> builds playlists from listening overlap; <strong>TikTok</strong>'s entire For You feed is a recommender with almost no other UI. The recommendation is the product.</li>
+          <li><strong>Cold start</strong> is the catch: with zero history, collaborative filtering has nothing to compute. A new user has no taste-twins yet; a new item has no one who has rated it yet.</li>
+          <li><strong>The fixes are all "borrow signal from somewhere else":</strong> ask a few onboarding questions ("pick 3 shows you like"), lean on content features (genre, tags) until behavior arrives, and fall back to popularity ("here is what is trending") so the feed is never empty.</li>
+          <li><strong>Why leaders care:</strong> the first-session experience decides whether a new user ever comes back. Cold start is not an edge case - it is every user's day one.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The 2006 Netflix Prize put $1M on improving recommendations by 10% - that is how much the engine was worth to them. And roughly 35% of Amazon's sales are attributed to its recommendation system. Recommendations are not a feature you add for delight; for these companies they are the business model.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: WHEN THEY GO WRONG ============ -->
+  <section class="section" id="wrong">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the failure modes</span>
+      <h2>When recommenders go wrong <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">A recommender optimizes for whatever metric you point it at - and it is relentless. Point it at "time on screen" and it will faithfully learn that outrage and cliffhangers keep you scrolling. The failures below are not bugs; they are the system doing exactly what it was told, which is why the human choice of objective matters more than the math.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A feedback loop: you click, the model learns, it shows more of the same, your feed narrows, and the loop repeats. A guardrail asks what the system optimizes for.">
+        <style>
+          .flT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .flS { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .9; text-anchor: middle; }
+          .flX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .flC { font: 700 13px Inter, sans-serif; fill: #053640; text-anchor: middle; }
+          .flCs { font: 400 11.5px Inter, sans-serif; fill: #053640; text-anchor: middle; }
+        </style>
+        <defs>
+          <marker id="flAr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.6"/>
+          </marker>
+        </defs>
+        <rect x="60" y="40" width="150" height="58" rx="12" fill="#4C1D95"/>
+        <text class="flT" x="135" y="66">You click</text>
+        <text class="flS" x="135" y="84">a behavior signal</text>
+        <rect x="365" y="40" width="150" height="58" rx="12" fill="#6D28D9"/>
+        <text class="flT" x="440" y="66">Model learns</text>
+        <text class="flS" x="440" y="84">"more of that"</text>
+        <rect x="670" y="40" width="150" height="58" rx="12" fill="#7C3AED"/>
+        <text class="flT" x="745" y="66">Shows more</text>
+        <text class="flS" x="745" y="84">of the same</text>
+        <rect x="365" y="180" width="150" height="58" rx="12" fill="#4C1D95"/>
+        <text class="flT" x="440" y="206">Feed narrows</text>
+        <text class="flS" x="440" y="224">the filter bubble</text>
+        <line x1="210" y1="69" x2="363" y2="69" stroke="#CFC9E6" stroke-width="3" marker-end="url(#flAr)"/>
+        <line x1="515" y1="69" x2="668" y2="69" stroke="#CFC9E6" stroke-width="3" marker-end="url(#flAr)"/>
+        <path d="M745,98 C745,150 560,150 490,178" stroke="#CFC9E6" stroke-width="3" fill="none" marker-end="url(#flAr)"/>
+        <path d="M375,180 C300,150 135,150 135,100" stroke="#CFC9E6" stroke-width="3" fill="none" marker-end="url(#flAr)"/>
+        <text class="flX" x="150" y="150">the loop closes -&gt;</text>
+        <rect x="560" y="182" width="290" height="86" rx="12" fill="#06B6D4"/>
+        <text class="flC" x="705" y="208">Guardrail</text>
+        <text class="flCs" x="705" y="230">What are we optimizing for?</text>
+        <text class="flCs" x="705" y="250">Satisfaction - or just watch-time?</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a click becomes a cage unless a human sets the right objective</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Bubbles, runaway loops, and the objective that matters<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Filter bubbles:</strong> click a few of one kind of thing and the feed narrows to more of it. Helpful at first, then quietly cuts off everything else - you stop seeing what you never clicked.</li>
+          <li><strong>Engagement optimization gone bad:</strong> if the metric is time-on-screen, the system learns that outrage, fear, and clickbait win. It is not malicious - it is a faithful optimizer pointed at the wrong number.</li>
+          <li><strong>Feedback loops:</strong> the model trains on the outputs it produced yesterday, so its own choices become tomorrow's "truth". Small early biases amplify into big ones.</li>
+          <li><strong>Why a human-set objective matters:</strong> the fix is not better math, it is a better target - optimize for long-term satisfaction, diversity, or "did you finish and feel good", not just the next click. Someone has to choose that.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          When a team demos a recommender, do not ask "how accurate is it?" - ask "what metric is it maximizing, and what behavior would that metric reward if taken to the extreme?" The answer reveals the risk before it ships.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Implicit vs explicit signals, and designing for serendipity<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Recommenders learn from two kinds of signal. <strong>Explicit</strong> signals are deliberate - a star rating, a thumbs-up, a "not interested". <strong>Implicit</strong> signals are behavioral - a click, a hover, seconds watched, a re-play. Implicit data is abundant but noisy: a click is not a like (you might have clicked and immediately regretted it, or lingered because you were confused). Systems that treat every click as endorsement are the ones that spiral into clickbait. The mature response is to add <strong>diversity and serendipity as deliberate design choices</strong> - reserve slots for the unexpected, cap how narrow the feed can get, and weight explicit "I loved this" over raw clicks. Good recommendation is as much product judgment as it is modeling.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>Rate a few, watch it predict the rest <span class="tag demo">★ 10 min · everyone plays</span></h2>
+    </div>
+    <p class="lede">Collaborative filtering, live and in your hands. Rate a handful of items and the engine finds the phantom user whose taste most matches yours, then borrows their ratings to predict yours. Watch the recommendations move as you change your mind.</p>
+    <div class="widget" data-widget="recsandbox" data-config='{"title": "★ Recommendation sandbox - rate a few, watch it predict the rest", "intro": "Rate at least 2 items. The engine finds the phantom user whose taste most matches yours and borrows their ratings - collaborative filtering, live."}'></div>
+    <div class="steps">
+      <div class="step"><p>Rate 3 or 4 items honestly. Read the recommendations it produces and the "because your taste-twin..." explanation underneath.</p></div>
+      <div class="step"><p>Now change one rating - flip a high score to low. Watch the recommendations shift as your taste-twin changes. The engine has no opinions; it only mirrors the crowd.</p></div>
+      <div class="step"><p>Say it out loud: no one ever described these items to the machine. It knows nothing about genre or content - only who liked what. That is collaborative filtering in one breath.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Design the cold start <span class="tag demo">★ 6 min · everyone designs</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Pick a product you know well (yours, or one you use). Imagine a brand-new user opening it for the very first time - the feed is empty and the engine knows nothing.</p></div>
+      <div class="step"><p>Design the first session. What 3 questions or signals would you collect to bootstrap recommendations? Onboarding picks? Location? Which content features could stand in until behavior arrives?</p></div>
+      <div class="step"><p>Decide your popularity fallback: while you wait for signal, what safe, broadly-liked items keep the screen from being empty?</p></div>
+      <div class="step"><p>Share one design. Notice how fast "just recommend things" turns into real product decisions about what to ask and when.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>Spot the objective <span class="tag demo">★ 6 min · everyone diagnoses</span></h2>
+    </div>
+    <p class="lede">Four real feeds. For each, name the metric it most likely optimizes and the failure mode that metric risks - then propose a healthier objective.</p>
+    <div class="steps">
+      <div class="step"><p><strong>A news feed.</strong> What is it optimizing - clicks? time? What failure mode does that invite (outrage, doom-scrolling, clickbait headlines)?</p></div>
+      <div class="step"><p><strong>A short-video feed.</strong> Likely watch-time and completion. What behavior would that reward if pushed to the extreme? What bubble forms?</p></div>
+      <div class="step"><p><strong>A shopping feed and a music feed.</strong> Do the same for each: guess the metric, name the risk, then propose a healthier objective (satisfaction, diversity, "came back next week").</p></div>
+      <div class="step"><p>Compare answers. The same technology serves all four - the objective, chosen by a human, is what makes one helpful and another harmful.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>Several large platforms have publicly re-tuned their feeds away from raw engagement - down-weighting content that keeps people scrolling but leaves them feeling worse, and adding "are you still enjoying this?" style checks. That is a business admitting the metric was the problem, not the model. The literate leader asks the objective question before the harm, not after.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Name the strategy:</strong> for three recommendations you get this week (a show, a product, a song), guess whether it came from people-similarity (collaborative) or item-similarity (content-based) - and why.</li>
+      <li><strong>Finish your cold-start design</strong> from Apply-along 2 - write the 3 onboarding signals and the popularity fallback for a product you care about.</li>
+      <li><strong>Watch your own bubble:</strong> notice one feed narrowing on you this week. What did you click that started it? Would a diversity slot have helped?</li>
+      <li><strong>Read the self-study cards</strong> above: matrix factorization, and implicit vs explicit signals.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What is the core difference between collaborative filtering and content-based recommendation?</p>
+      <button class="qopt" type="button">A · Collaborative is AI and content-based is just a rule</button>
+      <button class="qopt" type="button">B · Collaborative uses the crowd's behavior (people like you), content-based uses the item's own features (items like this)</button>
+      <button class="qopt" type="button">C · Collaborative works for text and content-based only works for video</button>
+      <p class="qwhy">Collaborative filtering matches you to similar users and borrows their taste; content-based matches items by their features. Real systems blend both.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · What is the cold-start problem?</p>
+      <button class="qopt" type="button">A · The system slows down when too many people use it at once</button>
+      <button class="qopt" type="button">B · Recommendations get worse in winter when behavior changes</button>
+      <button class="qopt" type="button">C · A brand-new user or item has no history yet, so collaborative filtering has nothing to compute - solved by onboarding questions, content features, or a popularity fallback</button>
+      <p class="qwhy">No history means no taste-twins and no ratings. You borrow signal from elsewhere until behavior arrives - and it happens to every user on day one.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Where do filter bubbles come from?</p>
+      <button class="qopt" type="button">A · The system shows more of what you already clicked, so the feed narrows and you stop seeing what you never clicked - a feedback loop</button>
+      <button class="qopt" type="button">B · A bug that deletes content the company disagrees with</button>
+      <button class="qopt" type="button">C · Slow internet dropping some of the recommendations</button>
+      <p class="qwhy">Bubbles are the engine faithfully doing its job: reward the click, show more of it, narrow the feed. The fix is a better objective and deliberate diversity, not better accuracy.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">This course teaches the working intuition of each idea and credits the canon. Leaders get judgment; practitioners get the Self-study lane and the names to go deeper.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Collaborative filtering</span><span class="note">people-similarity, the taste-twin - Part 1 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Content-based recommendation</span><span class="note">item-similarity from features - Part 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Cold start</span><span class="note">the empty day-one feed and how to bootstrap it - Part 2 + Apply-along 2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Filter bubbles &amp; feedback loops</span><span class="note">engagement-optimization failure modes - Part 3 + Apply-along 3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Matrix factorization</span><span class="note">self-study card - hidden taste factors behind the grid</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Implicit vs explicit signals</span><span class="note">self-study card - a click is not a like; diversity by design</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Two strategies</b><span>Collaborative = people like you (crowd behavior). Content-based = items like this (item features). Real systems blend both.</span></div>
+      <div class="cheat-item"><b>Matrix factorization</b><span>Finds hidden "taste factors" behind the ratings grid, then fills the blanks. Same move as embeddings: compress, then measure distance.</span></div>
+      <div class="cheat-item"><b>Recommender-first</b><span>Netflix, Amazon, Spotify, TikTok. ~35% of Amazon sales, a $1M Netflix Prize. Recs are the business, not a feature.</span></div>
+      <div class="cheat-item"><b>Cold start</b><span>New user or item = no history. Fix by onboarding questions, content features, and a popularity fallback. It hits every user on day one.</span></div>
+      <div class="cheat-item"><b>Failure modes</b><span>Filter bubbles, runaway engagement, feedback loops. The model faithfully optimizes whatever metric you chose - so choose well.</span></div>
+      <div class="cheat-item"><b>The guardrail question</b><span>"What are we optimizing for - satisfaction, or just watch-time?" A click is not a like. Build in diversity on purpose.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 4 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="03-embeddings.html">← Embeddings</a> &nbsp;·&nbsp; <a href="05-search-and-ranking.html">Next: Search and ranking →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 3 · Embeddings: how machines read meaning - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 3 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 3 of 8</div>
+    <h1>Embeddings: <span class="accent">how machines read meaning</span></h1>
+    <p class="sub">A computer has no dictionary. It cannot read "cheap" and feel what you feel. So we do something odd and powerful: we turn every word, image, or product into a list of numbers positioned in space, where things that mean similar things land near each other. That one trick - meaning as location - is the quiet engine under search, recommendations, and every large language model. This session makes it click.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Meaning, as a location</h2>
+    </div>
+    <p class="lede">Session 2 showed how a neural net turns messy input into numbers. Embeddings are the most useful thing those numbers do: they capture meaning as a position in space. Put every word on a map so that "king" and "queen" sit in the same neighborhood, "cat" and "dog" in another, and "laptop" and "notebook computer" almost on top of each other - and suddenly a machine that cannot read can still find what you mean. Once you see this, search, recommendations, and LLMs all reveal the same gear turning underneath.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      What an embedding is (a list of numbers - a vector - that captures the meaning of a thing), why "near = related" turns meaning into arithmetic you can measure, the famous king - man + woman ≈ queen trick and why it matters, and why one embedding space quietly powers search, recommendations, and the retrieval half of every useful GenAI deployment you will build.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THINGS INTO NUMBERS ============ -->
+  <section class="section" id="vectors">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the core move</span>
+      <h2>Turning things into numbers <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">An embedding is a list of numbers - a vector - that stands in for the meaning of a word, an image, or a product. The machine never gets a definition. It only gets positions: it learns, from seeing billions of examples of how words are used, to place similar things close together and different things far apart. We live in a world of two or three dimensions, so to actually see an embedding we squash it down to a 2D map. On that map, meaning becomes geography.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A 2D meaning map with words clustered into themed neighborhoods: royalty, animals, and tech">
+        <style>
+          .emAx { stroke: #CFC9E6; stroke-width: 2; fill: none; marker-end: url(#emAh); }
+          .emClab { font: 700 13px Inter, sans-serif; fill: #4C1D95; text-anchor: middle; }
+          .emW { font: 600 12.5px Inter, sans-serif; fill: #1E1B2E; text-anchor: middle; }
+          .emX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+        </style>
+        <defs>
+          <marker id="emAh" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <line class="emAx" x1="60" y1="320" x2="60" y2="40"/>
+        <line class="emAx" x1="60" y1="320" x2="840" y2="320"/>
+        <text class="emX" x="70" y="52">meaning dimension 2</text>
+        <text class="emX" x="700" y="342">meaning dimension 1</text>
+
+        <ellipse cx="200" cy="120" rx="120" ry="66" fill="#EDE9FE"/>
+        <text class="emClab" x="200" y="70">royalty</text>
+        <circle cx="160" cy="118" r="5" fill="#6D28D9"/><text class="emW" x="160" y="138">king</text>
+        <circle cx="238" cy="106" r="5" fill="#6D28D9"/><text class="emW" x="238" y="98">queen</text>
+        <circle cx="205" cy="150" r="5" fill="#6D28D9"/><text class="emW" x="205" y="168">throne</text>
+
+        <ellipse cx="470" cy="230" rx="120" ry="66" fill="#EDE9FE"/>
+        <text class="emClab" x="470" y="182">animals</text>
+        <circle cx="430" cy="230" r="5" fill="#7C3AED"/><text class="emW" x="430" y="250">cat</text>
+        <circle cx="508" cy="218" r="5" fill="#7C3AED"/><text class="emW" x="508" y="210">dog</text>
+        <circle cx="475" cy="262" r="5" fill="#7C3AED"/><text class="emW" x="475" y="280">kitten</text>
+
+        <ellipse cx="720" cy="130" rx="120" ry="66" fill="#EDE9FE"/>
+        <text class="emClab" x="720" y="80">tech</text>
+        <circle cx="678" cy="130" r="5" fill="#06B6D4"/><text class="emW" x="678" y="150">laptop</text>
+        <circle cx="762" cy="118" r="5" fill="#06B6D4"/><text class="emW" x="762" y="110">server</text>
+        <circle cx="722" cy="160" r="5" fill="#06B6D4"/><text class="emW" x="722" y="178">app</text>
+
+        <text class="emX" x="60" y="352">The machine placed these with no dictionary - only by learning which words appear in similar company. Similar meaning, nearby dots.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - meaning as neighborhoods on a 2D map</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>No dictionary, only positions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>An embedding is a vector.</strong> "King" might become a list like [0.7, -0.2, 0.9, ...]. The individual numbers mean nothing to a human; the position they define is what matters.</li>
+          <li><strong>Similar things get similar vectors.</strong> The model learns this from usage - "cat" and "kitten" show up in the same kinds of sentences, so they land near each other. No one labels them "both animals".</li>
+          <li><strong>The machine has no meaning of its own.</strong> It has geography. "Close together" is the only notion of "related" it owns - and it turns out to be enough for an astonishing amount of useful work.</li>
+          <li><strong>2D is a shadow.</strong> The map above is squashed so we can see it. Real embeddings have hundreds or thousands of dimensions (self-study card) - but the intuition, near = related, holds in any number of them.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Spotify does not just embed songs by genre tags - it embeds them by how people actually listen, so a moody indie track and a certain film score can land next to each other even though no human ever filed them together. The "you might also like" that feels uncannily right is often just a nearest-neighbor lookup in an embedding space. Meaning, learned from behavior, turned into distance.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: DISTANCE + ARITHMETIC ============ -->
+  <section class="section" id="distance">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the quiet engine</span>
+      <h2>Distance = similarity, and the famous arithmetic <span class="tag concept">4 min live</span></h2>
+    </div>
+    <p class="lede">If meaning is a position, then relatedness is distance: near means similar, far means unrelated. That single idea is the engine humming under search, recommendations, and LLMs - they all convert things to vectors and measure how close they are. And because meaning has directions as well as positions, you can even do arithmetic with it: the direction from "man" to "woman" is the same direction as from "king" to "queen".</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A vector parallelogram showing king minus man plus woman lands near queen">
+        <style>
+          .vaW { font: 700 14px Inter, sans-serif; fill: #1E1B2E; text-anchor: middle; }
+          .vaEq { font: 700 15px Inter, sans-serif; fill: #4C1D95; text-anchor: middle; }
+          .vaX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .vaGender { stroke: #06B6D4; stroke-width: 3; fill: none; marker-end: url(#vaAhC); }
+          .vaRoyal { stroke: #7C3AED; stroke-width: 3; fill: none; marker-end: url(#vaAhV); stroke-dasharray: 6 5; }
+        </style>
+        <defs>
+          <marker id="vaAhC" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6" fill="none" stroke="#06B6D4" stroke-width="1.8"/>
+          </marker>
+          <marker id="vaAhV" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6" fill="none" stroke="#7C3AED" stroke-width="1.8"/>
+          </marker>
+        </defs>
+        <circle cx="200" cy="250" r="7" fill="#1E1B2E"/><text class="vaW" x="200" y="278">man</text>
+        <circle cx="470" cy="230" r="7" fill="#1E1B2E"/><text class="vaW" x="470" y="258">woman</text>
+        <circle cx="200" cy="110" r="7" fill="#1E1B2E"/><text class="vaW" x="200" y="98">king</text>
+        <circle cx="470" cy="90" r="7" fill="#06B6D4"/><text class="vaEq" x="500" y="82">queen</text>
+
+        <line class="vaGender" x1="210" y1="248" x2="460" y2="232"/>
+        <text class="vaX" x="300" y="258">man → woman</text>
+        <line class="vaGender" x1="210" y1="108" x2="460" y2="92"/>
+        <text class="vaX" x="300" y="118">king → queen (same direction)</text>
+        <line class="vaRoyal" x1="200" y1="240" x2="200" y2="122"/>
+        <text class="vaX" x="112" y="185">man → king</text>
+        <line class="vaRoyal" x1="470" y1="220" x2="470" y2="102"/>
+        <text class="vaX" x="482" y="165">woman → queen</text>
+
+        <text class="vaEq" x="700" y="150">king - man + woman</text>
+        <text class="vaEq" x="700" y="178">≈ queen</text>
+        <text class="vaX" x="600" y="300">Meaning has directions. "Add femaleness" is the same move whether you start at man or at king.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - meaning has directions you can add and subtract</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Near means related - and why that runs everything<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Distance is the whole trick.</strong> To find things related to X, embed X and grab its nearest neighbors. That is recommendations, search, "find similar", and duplicate detection - all the same move.</li>
+          <li><strong>Meaning has directions.</strong> king - man + woman lands right next to queen because "royalty" and "gender" are directions in the space. It is a party trick that reveals something real: the geometry actually encodes relationships.</li>
+          <li><strong>One gear, many machines.</strong> Search converts your query and its documents to vectors and ranks by closeness. Recommenders embed users and items and find near matches. LLMs (Session 6) run entirely on embeddings inside. Learn this once, understand all three.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Old keyword search for "affordable laptop" would miss a product page that says "cheap notebook computer" - not a single word matches. Semantic search embeds both and notices their vectors are almost touching, so it surfaces the page anyway. This is why modern search finally understands that "won't turn on" and "power failure" are the same complaint. Different words, near vectors.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: VECTOR DBS ============ -->
+  <section class="section" id="vectordb">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · why this reaches you</span>
+      <h2>Vector databases and why this matters to you <span class="tag concept">4 min live</span></h2>
+    </div>
+    <p class="lede">Storing a few embeddings is easy. Storing millions and finding the nearest neighbors to a new query in milliseconds is a real engineering problem, and the tool that solves it is a vector database. This is not a side note - it is the retrieval half of RAG (retrieval-augmented generation, previewed for Sessions 6 and 7), and embeddings of your company's own documents are the foundation of most genuinely useful GenAI deployments you will ever approve.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The vector DB, and the RAG preview<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>A vector database</strong> stores millions of embeddings and answers one question fast: "what is nearest to this?" That nearest-neighbor search is the workhorse behind semantic search and recommendations at scale.</li>
+          <li><strong>This is the retrieval in RAG.</strong> When you point a language model at your own documents, the flow is: embed all your docs into a vector DB, embed the user's question, retrieve the nearest passages, and hand those to the model to answer from. Sessions 6 and 7 build on this.</li>
+          <li><strong>Your data is the moat.</strong> The public model is the same one your competitors can buy. Embeddings of your contracts, tickets, and manuals are what make it useful to you specifically. The value is in what you embed, not the model.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          When a team proposes a GenAI feature "on our data", ask "where do the embeddings live, and how fresh are they?" If the answer is vague, the retrieval layer is not designed - and a language model without good retrieval will confidently make things up (Session 6). The vector DB is where usefulness actually comes from.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why hundreds of dimensions, and how images and audio embed too<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The 2D map in Part 1 is a convenience for human eyes. Real embeddings have hundreds to thousands of dimensions, and they need them: meaning has far more than two independent directions (formality, sentiment, topic, tense, and hundreds more we cannot even name). Each extra dimension gives the model another axis to separate meanings along, which is why a real space can tell apart "bank" the riverside from "bank" the vault. The 2D picture is a shadow of that high-dimensional reality - useful for intuition, lossy in fact. And the same machinery embeds any input: an image becomes a vector (so "find similar photos" works), audio becomes a vector, even a whole document does. Once everything is a vector in one space, you can measure the distance between a sentence and a picture - which is how text-to-image search works.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>The meaning map <span class="tag demo">★ 10 min · everyone explores</span></h2>
+    </div>
+    <p class="lede">A map of words the machine placed with no dictionary - only by learning what appears in similar company. Click around and watch meaning turn into neighborhoods.</p>
+    <div class="widget" data-widget="embedding" data-config='{"title": "★ The meaning map - click a word, watch its neighbors light up", "intro": "The machine placed these words with no dictionary - only by learning what appears in similar contexts. Click around."}'></div>
+    <div class="steps">
+      <div class="step"><p>Click one word in each neighborhood and read its nearest neighbors. Do they feel related to you? They almost always do.</p></div>
+      <div class="step"><p>Notice the themes formed themselves. No human labeled these clusters "animals" or "tech" - the positions came purely from how the words are used. That is unsupervised meaning.</p></div>
+      <div class="step"><p>Find a word that sits between two clusters and ask why. The in-between ones are the interesting cases - meaning is a spectrum, not a set of boxes.</p></div>
+      <div class="step"><p>Say out loud what "distance" is doing here: it is the machine's only definition of "related". Everything downstream - search, recs, RAG - is built on measuring it.</p></div>
+    </div>
+    <div class="callout tip">
+      <strong>The debrief</strong>
+      You just watched a machine act like it understands meaning, using nothing but positions and distances. It never read a definition. Hold onto the healthy doubt in the self-study card: this is statistical meaning, not human understanding - powerful, and not the same thing.
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Keyword vs semantic <span class="tag demo">★ 6 min · everyone writes</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Write a query the way a real customer would type it, using DIFFERENT words than your company's official term. Think "won't turn on" instead of "power failure", or "money back" instead of "refund policy".</p></div>
+      <div class="step"><p>Ask: would old keyword search find the right page? Usually no - not one word matches the official document.</p></div>
+      <div class="step"><p>Now picture both phrases as dots on the meaning map. They land almost on top of each other, because they mean the same thing. Semantic search catches exactly what keyword search misses.</p></div>
+      <div class="step"><p>Share the sharpest mismatch in the room. This gap - between how customers talk and how your content is written - is precisely the money embeddings unlock.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>What would you embed? <span class="tag demo">★ 6 min · everyone lists</span></h2>
+    </div>
+    <p class="lede">Turn the idea on your own business. Where do you have things that mean the same but are worded differently?</p>
+    <div class="steps">
+      <div class="step"><p>List 3 things in your work that are "similar in meaning but different in words": support tickets, product descriptions, resumes, past contracts, meeting notes.</p></div>
+      <div class="step"><p>For each, ask what job "find the nearest ones" would do: dedupe tickets, match a resume to a role, surface the past deal most like this one.</p></div>
+      <div class="step"><p>Mark which would clearly beat keyword search - anywhere people describe the same thing many ways, semantic wins.</p></div>
+      <div class="step"><p>Circle the single best candidate. That is a real, fundable embedding project - and the seed of a RAG deployment you will understand fully by Session 7.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>A support team embedded three years of resolved tickets. Now when a new ticket arrives, the system pulls the five most similar past cases and their fixes - no keyword overlap required. Average handle time dropped, and new agents ramped faster because the "have we seen this before?" question got a real answer. One embedding space, quietly doing the work.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Play the meaning map</strong> from Apply-along 1 for five minutes. Find one neighbor pairing that surprises you and be ready to explain why the machine put them together.</li>
+      <li><strong>Finish your embed list</strong> from Apply-along 3 - at least 3 candidates, one circled as fundable.</li>
+      <li><strong>Read the self-study card</strong> above: why real embeddings have hundreds of dimensions, and how images and audio embed the same way.</li>
+      <li><strong>Optional deep end:</strong> search "word2vec king queen" and look at the original example. Ten minutes on where the famous arithmetic came from.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What is an embedding, in one line?</p>
+      <button class="qopt" type="button">A · A dictionary definition the machine looks up</button>
+      <button class="qopt" type="button">B · A list of numbers (a vector) that captures the meaning of a word, image, or product as a position in space</button>
+      <button class="qopt" type="button">C · A rule an engineer writes for each word</button>
+      <p class="qwhy">The machine has no dictionary - only positions. Similar things get similar vectors, learned from how they are used, not from any human labels.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · In an embedding space, what does distance between two vectors mean?</p>
+      <button class="qopt" type="button">A · Nothing - the positions are random</button>
+      <button class="qopt" type="button">B · How many letters the two words share</button>
+      <button class="qopt" type="button">C · Similarity - near means related, far means unrelated</button>
+      <p class="qwhy">Near = related is the whole engine. Find related things by grabbing nearest neighbors. It powers search, recommendations, and LLMs alike.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What does a vector database mainly enable?</p>
+      <button class="qopt" type="button">A · Fast nearest-neighbor search over millions of embeddings - the retrieval half of RAG</button>
+      <button class="qopt" type="button">B · Cheaper storage for spreadsheets</button>
+      <button class="qopt" type="button">C · Training a model from scratch</button>
+      <p class="qwhy">A vector DB stores millions of embeddings and finds the nearest ones fast. That retrieval step is what grounds a GenAI feature in your own data.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">Working intuition of each idea, credited to the canon. Leaders get the judgment; practitioners get the Self-study lane and the names to go deeper.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Embeddings / vectors</span><span class="note">meaning as a list of numbers - Part 1 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Distance = similarity</span><span class="note">near means related - Part 2 + all three apply-alongs</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Vector arithmetic (king - man + woman ≈ queen)</span><span class="note">meaning has directions - Part 2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Semantic search</span><span class="note">different words, near vectors - Part 2 + Apply-along 2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Vector databases + RAG preview</span><span class="note">retrieval at scale, feeding an LLM - Part 3 (built in S6-S7)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">High dimensions; image / audio embeddings</span><span class="note">self-study card - the 2D map is a shadow</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Embedding</b><span>A vector - a list of numbers - that captures meaning as a position in space. The machine has no dictionary, only geography.</span></div>
+      <div class="cheat-item"><b>Near = related</b><span>Similar things get similar vectors. Distance is the machine's only definition of "related", and it is enough for a lot of work.</span></div>
+      <div class="cheat-item"><b>Meaning has directions</b><span>king - man + woman ≈ queen. The geometry actually encodes relationships like gender and royalty.</span></div>
+      <div class="cheat-item"><b>Semantic search</b><span>"Cheap notebook" finds "affordable laptop" - different words, near vectors. Keyword search misses what embeddings catch.</span></div>
+      <div class="cheat-item"><b>Vector database</b><span>Stores millions of embeddings, finds nearest neighbors fast. The retrieval half of RAG.</span></div>
+      <div class="cheat-item"><b>Your data is the moat</b><span>Embeddings of your docs make a public model useful to you. Value is in what you embed, not the model itself.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 3 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="02-neural-nets.html">← Prev: Neural nets and deep learning</a> &nbsp;·&nbsp; <a href="04-recommendations.html">Next: Recommendations →</a> &nbsp;·&nbsp; <a href="../index.html">← All sessions</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

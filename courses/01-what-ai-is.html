@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 1 · What AI actually is - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 1 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 1 of 8</div>
+    <h1>What AI actually is: <span class="accent">the nested dolls</span></h1>
+    <p class="sub">Everyone says "AI" and means five different things. This session gives you the map: how AI, machine learning, deep learning and generative AI nest inside each other, the three eras that got us here, and the single most useful question a leader can ask - is this even an AI problem? The sequel to the data literacy course; here the machines start to learn.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundation</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Why this course exists</h2>
+    </div>
+    <p class="lede">The data literacy course ended at a wall: deep learning, recommendations, search, and generative AI were "out of scope, coming next". This is next. AI literacy is not learning to build models - it is knowing what these systems actually do, why they work, where they fail, and when the answer is "do not use AI for this". Over 8 sessions you will look inside neural nets, embeddings, recommenders, search, and LLMs - each with a hands-on toy, no code anywhere. Leaders get the judgment; practitioners get a light second lane of depth marked Self-study.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The nested-dolls model (AI &gt; ML &gt; deep learning &gt; GenAI) so no vendor pitch can confuse you again, the three-era story of how we got here, and the right-tool test - the question that saves more money than any model: "is this actually an AI problem, or would a rule or a spreadsheet do?"
+    </div>
+  </section>
+
+  <!-- ============ PART 1: NESTED DOLLS ============ -->
+  <section class="section" id="nested">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the words untangled</span>
+      <h2>AI, ML, deep learning, GenAI <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">These four words are not synonyms and they are not rivals - they nest. Every generative AI is a deep learning model; every deep learning model is machine learning; all machine learning is AI. But not the reverse. Getting the nesting right is the first defense against hype.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Concentric nested circles: AI contains machine learning contains deep learning contains generative AI">
+        <style>
+          .ndT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .ndS { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .85; text-anchor: middle; }
+          .ndX { font: 400 12.5px Inter, sans-serif; fill: #6B6785; }
+          .ndH { font: 700 14px Inter, sans-serif; fill: #1E1B2E; }
+        </style>
+        <ellipse cx="300" cy="165" rx="278" ry="140" fill="#4C1D95"/>
+        <ellipse cx="300" cy="178" rx="224" ry="112" fill="#6D28D9"/>
+        <ellipse cx="300" cy="192" rx="162" ry="82" fill="#7C3AED"/>
+        <ellipse cx="300" cy="210" rx="96" ry="52" fill="#06B6D4"/>
+        <text class="ndT" x="300" y="46">Artificial intelligence</text>
+        <text class="ndS" x="300" y="63">any machine mimicking smart behavior</text>
+        <text class="ndT" x="300" y="96">Machine learning</text>
+        <text class="ndS" x="300" y="112">learns patterns from data</text>
+        <text class="ndT" x="300" y="146">Deep learning</text>
+        <text class="ndS" x="300" y="161">many-layered neural nets</text>
+        <text class="ndT" x="300" y="206" style="fill:#053640">Generative AI</text>
+        <text class="ndS" x="300" y="222" style="fill:#053640;opacity:.9">makes new content</text>
+        <text class="ndH" x="622" y="120">The which-doll test:</text>
+        <text class="ndX" x="622" y="146">Learning from data? → ML.</text>
+        <text class="ndX" x="622" y="170">Deep neural nets? → deep learning.</text>
+        <text class="ndX" x="622" y="194">Creating new content? → GenAI.</text>
+        <text class="ndX" x="622" y="218">None of these? → just a rule.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four words that nest, not compete</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The nesting, and why it defuses hype<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>AI</strong> is the broad goal: machines doing things that seem intelligent. A thermostat and a chess rulebook technically qualify - "AI" alone tells you almost nothing.</li>
+          <li><strong>Machine learning</strong> narrows it: systems that learn patterns from data instead of following hand-written rules. This is where the data literacy course lived (regression, clustering, churn models).</li>
+          <li><strong>Deep learning</strong> is ML using many-layered neural networks - the engine behind modern vision, speech, and language. Session 2 opens it up.</li>
+          <li><strong>Generative AI</strong> is deep learning that creates new content (text, images, code). ChatGPT and image generators live in this innermost doll. It is the smallest circle, not the whole field.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>When a vendor says "our product is powered by AI", the literate question is "which doll?". A fraud filter might be simple ML (great, explainable, cheap). A "smart assistant" might be a wrapped LLM (powerful, but can hallucinate). The word "AI" is marketing; the doll is the fact.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Narrow vs general: the AGI myth-check<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every AI in production today is <strong>narrow</strong>: brilliant at one task, useless outside it. The chess engine cannot drive; the language model cannot truly reason about physics it has not seen. <strong>Artificial general intelligence</strong> (AGI) - one system matching humans across any task - does not exist and its timeline is genuinely contested among serious researchers.</p>
+        <ul>
+          <li>Modern LLMs feel general because language touches everything, but they are still pattern machines with sharp edges (Session 6).</li>
+          <li>The leadership takeaway: buy and deploy for narrow, well-defined tasks with clear success metrics. "It will figure it out" is not a spec.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THREE ERAS ============ -->
+  <section class="section" id="eras">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · how we got here</span>
+      <h2>Three eras of AI <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">AI is not new - it is on its third act. Knowing the arc tells you why this moment feels different, and why "AI winters" happened before (over-promise, under-deliver, funding collapse). Today's era is real, but the pattern is worth remembering.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of three AI eras: rules, machine learning, foundation models">
+        <style>
+          .erT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .erS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .9; }
+          .erX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .erL { stroke: #CFC9E6; stroke-width: 3; fill: none; marker-end: url(#erAh); }
+        </style>
+        <defs>
+          <marker id="erAh" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <rect x="30" y="60" width="240" height="92" rx="14" fill="#4C1D95"/>
+        <text class="erT" x="48" y="88">1 · Rules (1950s-80s)</text>
+        <text class="erS" x="48" y="110">experts hand-code every if-then</text>
+        <text class="erS" x="48" y="128">brittle; breaks on the unexpected</text>
+        <text class="erS" x="48" y="146">"expert systems", then winter</text>
+        <rect x="320" y="60" width="240" height="92" rx="14" fill="#6D28D9"/>
+        <text class="erT" x="338" y="88">2 · Learning (1990s-2010s)</text>
+        <text class="erS" x="338" y="110">machines learn from labeled data</text>
+        <text class="erS" x="338" y="128">deep learning breaks out ~2012</text>
+        <text class="erS" x="338" y="146">vision, speech, translation</text>
+        <rect x="610" y="60" width="240" height="92" rx="14" fill="#06B6D4"/>
+        <text class="erT" x="628" y="88" style="fill:#082F35">3 · Foundation (2018-now)</text>
+        <text class="erS" x="628" y="110" style="fill:#082F35">one huge model, many tasks</text>
+        <text class="erS" x="628" y="128" style="fill:#082F35">transformers + scale + GenAI</text>
+        <text class="erS" x="628" y="146" style="fill:#082F35">the era you are living in</text>
+        <line class="erL" x1="270" y1="106" x2="318" y2="106"/>
+        <line class="erL" x1="560" y1="106" x2="608" y2="106"/>
+        <text class="erX" x="30" y="196">Each era did not replace the last - rules and classic ML still run most of the world. The newest doll is the loudest, not the biggest by usage.</text>
+        <text class="erX" x="30" y="220">The lesson of the two winters: value follows working deployments, not demos. Session 8 returns to separating ROI from hype.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three acts, two winters, one throughline</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why 2012 and 2018 were hinge years<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>2012 - deep learning breaks out.</strong> A neural net (AlexNet) crushed the ImageNet vision contest. The ingredients were not new ideas but new scale: massive labeled data + GPU compute. Session 2 tells this story.</li>
+          <li><strong>2017-2018 - the transformer + foundation models.</strong> A new architecture (the transformer) let models train on the entire internet and handle any language task. GPT and its cousins followed. Session 6 opens this up.</li>
+          <li><strong>The throughline:</strong> progress came from scale (data + compute) as much as cleverness. That is why "just add more data" is a real strategy - and why compute cost is now a boardroom line item (Session 8).</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          When someone pitches an AI breakthrough, ask "what is genuinely new - the idea, or the scale?" Often it is scale, which means the real questions are cost, data access, and defensibility, not magic.
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: RIGHT TOOL ============ -->
+  <section class="section" id="right-tool">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the money-saving question</span>
+      <h2>Is this even an AI problem? <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">The most valuable AI skill for a leader is knowing when NOT to use it. AI is probabilistic, expensive, and hard to explain. If a rule, a lookup, or a simple calculation solves the problem, that is not a consolation prize - it is the right answer. Monica Rogati's AI Hierarchy of Needs (from the data literacy course) says it plainly: you need the boring foundation before the fancy top.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The right-tool test, and the hierarchy under it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Rules beat AI when the logic is known and stable:</strong> tax brackets, shipping thresholds, "flag orders over $10k". Deterministic, explainable, free. Do not train a model to do arithmetic.</li>
+          <li><strong>Classic ML beats GenAI when you have structured data and a clear target:</strong> churn, forecasting, fraud scoring. Cheaper, faster, auditable (the whole data literacy course).</li>
+          <li><strong>Reach for deep learning / GenAI when the input is messy and human:</strong> free text, images, speech, open-ended generation. That is where the newest dolls earn their cost.</li>
+          <li><strong>The hierarchy:</strong> reliable data collection and cleaning (data literacy) sit UNDER any AI. Most failed AI projects are actually failed data projects wearing a fancy hat.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A retailer wanted "AI" to decide reorder quantities. A two-line rule (reorder when stock &lt; 2 weeks of average sales) captured most of the value in an afternoon, explainable to every store manager. AI came later, for the genuinely hard 10% (promotions, weather, new products). Right tool first, model second.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The cost of using AI where you should not<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Reaching for AI reflexively has real costs beyond the bill: you inherit unpredictability (it can be wrong in surprising ways), opacity (hard to explain to auditors or customers), and a maintenance burden (models drift, prompts break, vendors change). A rule you can read in one line has none of these. The literate default is: simplest tool that meets the bar, escalate only when it does not. Session 8 turns this into a use-case scorecard.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>Which doll is it? <span class="tag demo">★ 8 min · everyone sorts</span></h2>
+    </div>
+    <p class="lede">Eight systems from real life. Place each in the smallest doll that describes it - and notice which ones are not AI at all.</p>
+    <div class="widget" data-widget="sorter" data-config='{
+      "title": "★ Rule, classic ML, deep learning, or generative AI?",
+      "intro": "Click the smallest box that fits. Green = correct.",
+      "categories": ["Just a rule", "Classic ML", "Deep learning", "Generative AI"],
+      "items": [
+        {"t": "Flag every transaction above $10,000 for review.", "c": 0, "why": "a fixed threshold - deterministic logic, no learning, no AI needed"},
+        {"t": "Predict which customers will churn next month from their usage data.", "c": 1, "why": "learns a pattern from structured data with a clear target - classic ML (data literacy course)"},
+        {"t": "Identify tumors in an X-ray image.", "c": 2, "why": "messy image input, learned features - a deep neural net (CNN, Session 2)"},
+        {"t": "Draft a first-pass reply to a customer email.", "c": 3, "why": "creates new text - generative AI (an LLM, Session 6)"},
+        {"t": "Calculate shipping cost from weight and zone.", "c": 0, "why": "a formula - never train a model to do arithmetic"},
+        {"t": "Recommend the next show to watch.", "c": 1, "why": "collaborative filtering on ratings - classic ML at heart (Session 4)"},
+        {"t": "Transcribe a voicemail into text.", "c": 2, "why": "speech-to-text is a deep learning workhorse"},
+        {"t": "Generate a product photo that never existed.", "c": 3, "why": "image generation - generative AI (diffusion models)"}
+      ]}'></div>
+    <div class="callout tip">
+      <strong>The debrief</strong>
+      Two of eight were not AI at all - and that is the point. A data-literate organization reaches for the smallest doll that works. "Can we use AI for this?" should always be preceded by "should we?".
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Audit an AI claim <span class="tag demo">★ 7 min · everyone digs</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Find a real "AI-powered" claim - a product page, a vendor email, a headline you saw this week. Read it aloud.</p></div>
+      <div class="step"><p>Ask the three literate questions: which doll is it really (rule / ML / deep / GenAI)? what is genuinely new (idea or scale)? and what task exactly - narrow and measurable, or vague?</p></div>
+      <div class="step"><p>Rate the claim: substantive, or "AI" as a sticker on something simpler? Most land in between - and now you can say where and why.</p></div>
+      <div class="step"><p>Share one. The room will notice how often "AI" is a rule with better marketing - and occasionally, something genuinely deep.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>Run the right-tool test on your own backlog <span class="tag demo">★ 7 min · everyone decides</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>List 3 things someone in your org has proposed to "use AI" for (or that you are curious about).</p></div>
+      <div class="step"><p>For each, walk the ladder: could a rule do it? classic ML on data you have? does it genuinely need deep learning or GenAI (messy, human input)?</p></div>
+      <div class="step"><p>Mark the honest verdict. Flag any that are really data problems in disguise (no clean data = no AI, whatever the doll).</p></div>
+      <div class="step"><p>Keep this list. Session 8 turns it into a scored use-case matrix; the sessions between explain the dolls you flagged.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>Teams that run this test before the vendor call save quarters of wasted pilots. "We tried AI and it did not work" is usually "we pointed a model at a problem a rule owned, on data we had not cleaned". The test is cheap insurance.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Doll-spot in the wild:</strong> for five "AI" mentions you meet this week (news, tools, meetings), name the doll. The habit makes you unspinnable.</li>
+      <li><strong>Finish the right-tool list</strong> from Apply-along 3 - at least 5 use cases, each with an honest verdict.</li>
+      <li><strong>Read the self-study cards</strong> above: narrow vs general (AGI), and the cost of over-using AI.</li>
+      <li><strong>Optional deep end:</strong> if you skipped it, the AI Hierarchy of Needs essay (Monica Rogati) - 10 minutes that reframe every AI project as a data project first.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · A vendor says their tool is "powered by generative AI". What does that tell you about the nesting?</p>
+      <button class="qopt" type="button">A · It is the broadest, most capable kind of AI</button>
+      <button class="qopt" type="button">B · It is not real machine learning</button>
+      <button class="qopt" type="button">C · It is the innermost doll - a deep learning model that creates content, powerful but narrow and able to hallucinate</button>
+      <p class="qwhy">GenAI is the smallest circle inside deep learning inside ML inside AI. Powerful for messy, generative tasks - not a synonym for "the best AI".</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · A team wants to "use AI" to calculate shipping cost from weight and destination zone. Best response?</p>
+      <button class="qopt" type="button">A · Train a deep learning model on past shipments</button>
+      <button class="qopt" type="button">B · Use a rule or formula - the logic is known and stable, so AI adds cost and unpredictability for nothing</button>
+      <button class="qopt" type="button">C · Use an LLM to estimate it each time</button>
+      <p class="qwhy">The right-tool test: known, stable logic belongs in a rule. Never train (or prompt) a model to do arithmetic a formula nails for free.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What mostly caused the 2012 deep-learning breakout?</p>
+      <button class="qopt" type="button">A · New scale - massive labeled data plus GPU compute - applied to neural net ideas that already existed</button>
+      <button class="qopt" type="button">B · A brand-new mathematical theory invented that year</button>
+      <button class="qopt" type="button">C · The first computers fast enough to exist</button>
+      <p class="qwhy">The ideas were decades old; data and GPU scale made them work. That is why "is it the idea or the scale?" is such a sharp question.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">This course teaches the working intuition of each idea and credits the canon. Leaders get judgment; practitioners get the Self-study lane and the names to go deeper.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">AI / ML / deep learning / GenAI nesting</span><span class="note">the four dolls + the which-doll test - Part 1 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The three eras (rules / learning / foundation)</span><span class="note">the arc, the two winters, why 2012 &amp; 2018 mattered - Part 2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The right-tool test</span><span class="note">when NOT to use AI - Part 3 + Apply-alongs 2 and 3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">AI Hierarchy of Needs (Monica Rogati)</span><span class="note">data foundation under any AI - Part 3, callback to data literacy</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Narrow vs general / AGI</span><span class="note">self-study card - the honest state of the field</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The nested dolls</b><span>AI &gt; machine learning &gt; deep learning &gt; generative AI. Each is inside the last. "AI" alone tells you nothing - ask which doll.</span></div>
+      <div class="cheat-item"><b>Which doll test</b><span>Learning from data? ML. Deep neural nets? deep learning. Creating content? GenAI. None of these? just a rule.</span></div>
+      <div class="cheat-item"><b>Three eras</b><span>Rules (hand-coded) → learning (from data, deep learning ~2012) → foundation models (transformers + scale, ~2018).</span></div>
+      <div class="cheat-item"><b>Idea or scale?</b><span>Most recent leaps came from more data + compute, not new math. So ask about cost, data, defensibility.</span></div>
+      <div class="cheat-item"><b>The right-tool test</b><span>Rule &gt; classic ML &gt; deep/GenAI. Use the smallest that works. Two of eight "AI" tasks were not AI.</span></div>
+      <div class="cheat-item"><b>Hierarchy of needs</b><span>Clean, reliable data sits under any AI. Most failed AI projects are failed data projects in disguise.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 1 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="02-neural-nets.html">Next: Neural nets and deep learning →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

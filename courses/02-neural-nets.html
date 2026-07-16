@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 2 · Neural nets and deep learning - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 2 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 2 of 8</div>
+    <h1>Neural nets and deep learning: <span class="accent">a million tiny votes</span></h1>
+    <p class="sub">Everyone calls it a "brain" and pictures magic. It is simpler and stranger than that: a neuron adds up weighted inputs and fires past a threshold, stack enough of them and the lines bend into any shape, and training is just rolling downhill toward less error a few million times. This session opens the black box - and shows you exactly where it stays black.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundation</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The engine under the hype</h2>
+    </div>
+    <p class="lede">Session 1 named the dolls. Deep learning is the one everyone means when they say "AI" today - it powers vision, speech, translation, and the language models in Session 6. But the word "deep" hides something almost embarrassingly simple: a tiny unit that adds and compares, repeated at enormous scale. Once you see the neuron, the whole field stops being magic and starts being engineering - engineering with one honest catch, which is that nobody can fully read what the finished machine learned.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      What a neuron actually computes (a weighted sum plus a threshold), why stacking layers into a "deep" network lets it learn anything from pixels to faces, what training really is (roll downhill to less error, repeat), and the tradeoff every leader must own - more layers buy more capability and less explainability, which is fine for movie picks and not fine for loan denials.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE NEURON ============ -->
+  <section class="section" id="neuron">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the smallest part</span>
+      <h2>What a neuron actually does <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Forget biology for a moment. An artificial neuron is a small piece of arithmetic: it takes some inputs, multiplies each by a weight (how much that input matters), adds them up with a bias, and if the total clears a threshold it fires. One neuron draws exactly one straight line - a decision boundary that splits the world in two. The whole miracle of deep learning is what happens when you stack these lines into layers until they bend into any shape you need.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A single neuron computing a weighted sum plus bias, and a small three-layer network beside it">
+        <style>
+          .nuT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .nuI { font: 700 13px Inter, sans-serif; fill: #1E1B2E; text-anchor: middle; }
+          .nuX { font: 400 12px Inter, sans-serif; fill: #6B6785; text-anchor: middle; }
+          .nuH { font: 700 13px Inter, sans-serif; fill: #1E1B2E; text-anchor: middle; }
+          .nuL { stroke: #CFC9E6; stroke-width: 2; fill: none; marker-end: url(#nuAh); }
+          .nuW { stroke: #7C3AED; stroke-width: 2; fill: none; marker-end: url(#nuAh); }
+        </style>
+        <defs>
+          <marker id="nuAh" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <text class="nuH" x="210" y="34">One neuron = a weighted vote</text>
+        <circle cx="70" cy="90" r="24" fill="#EDE9FE"/>
+        <text class="nuI" x="70" y="95">x1</text>
+        <circle cx="70" cy="170" r="24" fill="#EDE9FE"/>
+        <text class="nuI" x="70" y="175">x2</text>
+        <line class="nuW" x1="96" y1="98" x2="290" y2="122"/>
+        <line class="nuW" x1="96" y1="162" x2="290" y2="138"/>
+        <text class="nuX" x="175" y="98">w1 ·</text>
+        <text class="nuX" x="175" y="172">w2 ·</text>
+        <circle cx="322" cy="130" r="34" fill="#6D28D9"/>
+        <text class="nuT" x="322" y="126">sum</text>
+        <text class="nuT" x="322" y="142">+ bias</text>
+        <line class="nuL" x1="356" y1="130" x2="404" y2="130"/>
+        <rect x="404" y="108" width="8" height="44" rx="2" fill="#C4B5FD"/>
+        <text class="nuX" x="408" y="172">threshold</text>
+        <circle cx="452" cy="130" r="24" fill="#06B6D4"/>
+        <text class="nuI" x="452" y="135" style="fill:#053640">out</text>
+        <line class="nuL" x1="476" y1="130" x2="418" y2="130" opacity="0"/>
+        <text class="nuX" x="210" y="238">Inputs times weights, add a bias, fire if it clears the line.</text>
+
+        <text class="nuH" x="690" y="34">Stack them into layers</text>
+        <circle cx="566" cy="88" r="15" fill="#EDE9FE"/>
+        <circle cx="566" cy="140" r="15" fill="#EDE9FE"/>
+        <circle cx="566" cy="192" r="15" fill="#EDE9FE"/>
+        <circle cx="690" cy="70" r="15" fill="#7C3AED"/>
+        <circle cx="690" cy="130" r="15" fill="#7C3AED"/>
+        <circle cx="690" cy="190" r="15" fill="#7C3AED"/>
+        <circle cx="814" cy="130" r="15" fill="#06B6D4"/>
+        <g stroke="#CFC9E6" stroke-width="1.2">
+          <line x1="581" y1="88" x2="675" y2="70"/><line x1="581" y1="88" x2="675" y2="130"/><line x1="581" y1="88" x2="675" y2="190"/>
+          <line x1="581" y1="140" x2="675" y2="70"/><line x1="581" y1="140" x2="675" y2="130"/><line x1="581" y1="140" x2="675" y2="190"/>
+          <line x1="581" y1="192" x2="675" y2="70"/><line x1="581" y1="192" x2="675" y2="130"/><line x1="581" y1="192" x2="675" y2="190"/>
+          <line x1="705" y1="70" x2="799" y2="130"/><line x1="705" y1="130" x2="799" y2="130"/><line x1="705" y1="190" x2="799" y2="130"/>
+        </g>
+        <text class="nuX" x="566" y="234">input</text>
+        <text class="nuX" x="690" y="234">hidden</text>
+        <text class="nuX" x="814" y="234">output</text>
+        <text class="nuX" x="690" y="268">Many lines together bend into any shape.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - one neuron draws a line, a network bends it</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Inputs, weights, threshold - and how it learns<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Inputs</strong> are the things the neuron looks at - pixels, numbers, signals from the layer before it.</li>
+          <li><strong>Weights</strong> say how much each input matters. A big weight means "pay attention to this one"; a weight near zero means "ignore it". The bias shifts the whole threshold up or down.</li>
+          <li><strong>The line.</strong> With those weights, one neuron splits its inputs into two sides - a decision boundary. That is all a single neuron can do: draw one straight cut.</li>
+          <li><strong>Learning</strong> is nothing more than adjusting those weights. Nobody sets them by hand. The network is shown examples, sees how wrong it is, and nudges every weight a little toward "less wrong" - over and over (Part 3).</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A spam filter's first layer might have neurons that weight words: "free" gets a big positive weight, your CEO's name a big negative one. No engineer wrote those numbers - the model learned them from millions of emails labeled spam or not. When spammers change tactics, you retrain and the weights shift. The logic lives in the weights, not in code you can read.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Activation functions: why the line gets to bend<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>If a neuron only ever added and compared, stacking layers would still just give you one big straight line - lots of lines added together are still a line. The fix is a small nonlinear step called an <strong>activation function</strong> (ReLU is the common one: "if the sum is negative, output zero, otherwise pass it through"). That one kink is what lets each layer bend the boundary a little, so many layers together can trace any curve - a circle, a spiral, a face. No nonlinearity, no depth advantage; it is the quiet reason "deep" is worth the trouble.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: WHY DEEP, WHY 2012 ============ -->
+  <section class="section" id="deep">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the breakout</span>
+      <h2>Why "deep" and why 2012 <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">"Deep" is not a compliment - it is a count. It means many hidden layers between input and output. Why bother with many? Because each layer learns higher-level features built from the one before it: raw pixels become edges, edges become shapes, shapes become parts, parts become a face. The network builds its own ladder of understanding, and nobody tells it what rung to put where.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An ascending strip showing features growing from pixels to edges to parts to a whole object">
+        <style>
+          .fhT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .fhS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .9; text-anchor: middle; }
+          .fhI { font: 700 14px Inter, sans-serif; fill: #053640; text-anchor: middle; }
+          .fhIs { font: 400 11.5px Inter, sans-serif; fill: #053640; opacity: .9; text-anchor: middle; }
+          .fhX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .fhL { stroke: #CFC9E6; stroke-width: 3; fill: none; marker-end: url(#fhAh); }
+        </style>
+        <defs>
+          <marker id="fhAh" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <rect x="24" y="140" width="180" height="70" rx="12" fill="#4C1D95"/>
+        <text class="fhT" x="114" y="170">Layer 1 · pixels</text>
+        <text class="fhS" x="114" y="190">raw dots of light</text>
+        <rect x="236" y="112" width="180" height="70" rx="12" fill="#6D28D9"/>
+        <text class="fhT" x="326" y="142">Layer 2 · edges</text>
+        <text class="fhS" x="326" y="162">lines and corners</text>
+        <rect x="448" y="84" width="180" height="70" rx="12" fill="#7C3AED"/>
+        <text class="fhT" x="538" y="114">Layer 3 · parts</text>
+        <text class="fhS" x="538" y="134">an eye, a wheel</text>
+        <rect x="660" y="56" width="196" height="70" rx="12" fill="#06B6D4"/>
+        <text class="fhI" x="758" y="86">Layer 4 · object</text>
+        <text class="fhIs" x="758" y="106">a face, a cat, a car</text>
+        <line class="fhL" x1="204" y1="160" x2="234" y2="150"/>
+        <line class="fhL" x1="416" y1="132" x2="446" y2="122"/>
+        <line class="fhL" x1="628" y1="104" x2="658" y2="94"/>
+        <text class="fhX" x="24" y="240">Each layer builds on the last. Low-level features feed mid-level feed high-level - the model writes its own ladder from data.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - pixels to edges to parts to object, one layer at a time</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The 2012 moment - old ideas, new fuel<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The ideas were from the 1980s.</strong> Neural nets and the training math had existed for decades but were slow, shallow, and easy to beat. The field had mostly moved on.</li>
+          <li><strong>2012 changed the fuel, not the idea.</strong> A deep net called AlexNet won the ImageNet image-recognition contest by a stunning margin. What was new: a huge labeled dataset (ImageNet's millions of images), and GPUs - gaming chips repurposed to do the arithmetic thousands of times faster.</li>
+          <li><strong>CNNs for images.</strong> The winning design was a convolutional neural network - it slides small filters across an image looking for the same feature anywhere it appears (an edge in the corner is still an edge). You do not need the math; you need to know CNN means "the vision workhorse".</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Before 2012, image-recognition error rates crept down a percent or two a year. AlexNet dropped the ImageNet error rate off a cliff in a single contest, and within about two years every serious vision team had pivoted to deep learning. It is one of the clearest "the field changed overnight" moments in tech - and a callback to Session 1: the leap was scale (data + GPUs), not a new theory.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: TRAINING + BLACK BOX ============ -->
+  <section class="section" id="training">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · learning and its price</span>
+      <h2>Training, and the black-box tradeoff <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Here is the whole training loop in one breath: show the network an example, measure how wrong its answer was, nudge every weight a tiny bit in the direction that would have been less wrong, and repeat - millions of times. That "nudge toward less wrong" is gradient descent, and the honest picture is a marble rolling downhill on a landscape of error until it settles in a valley. Nobody hand-tunes the weights; the downhill roll finds them.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Rolling downhill, and what it costs you<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Training = examples + error + nudge, repeated.</strong> The network guesses, compares to the right answer, and adjusts weights to shrink the gap. Gradient descent is just the rule for which way is "downhill" toward less error.</li>
+          <li><strong>More layers and more data buy more capability</strong> - the model can capture subtler patterns. This is why "just add more data" is a real strategy (Session 1).</li>
+          <li><strong>But capability trades against explainability.</strong> A model with millions of weights has no readable rulebook. It works, and it cannot fully tell you why. This is the black box.</li>
+          <li><strong>When the black box is fine:</strong> movie recommendations, photo tagging, draft suggestions - low stakes, easy to check, cheap to be wrong. <strong>When it is not:</strong> loan denials, medical flags, hiring - where a person deserves a reason and the law may demand one. Session 8 turns this into governance.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          Before you approve a deep-learning system, ask "who has to be able to explain this decision, and to whom?" If the answer is a regulator, a rejected applicant, or a court, you need either a simpler model you can read or a layer that produces reasons. Match the box to the stakes.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Overfitting and train/test, in the deep-learning context<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Callback to data literacy Session 6: a model that memorizes its training examples instead of learning the general pattern is <strong>overfit</strong> - it aces the practice questions and fails the real exam. Deep nets, with their millions of weights, are especially good at memorizing, so the discipline matters more here, not less. The guardrail is the same: hold back a <strong>test set</strong> the model never trains on, and judge it only on that. If it scores far better on data it has seen than on data it has not, it memorized rather than learned. When a vendor quotes accuracy, the literate question is "on held-out data the model never saw?".</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>Be the neuron <span class="tag demo">★ 10 min · everyone tunes</span></h2>
+    </div>
+    <p class="lede">You are about to do by hand what training automates. Two groups of dots; one straight line; three dials. Move the weights and the bias until the violet line perfectly separates the two groups.</p>
+    <div class="widget" data-widget="neuron" data-config='{"title": "★ Be the neuron - tune the weights until the line splits the dots", "intro": "Two groups of dots. Adjust w1, w2 and the bias until the violet line perfectly separates them (100%)."}'></div>
+    <div class="steps">
+      <div class="step"><p>Aim for 100%. Drag w1, w2 and the bias and watch the line swing and slide with each change.</p></div>
+      <div class="step"><p>Any dot with a red ring is misclassified - on the wrong side of your line. Your job is to leave zero red rings.</p></div>
+      <div class="step"><p>Notice what you are doing: you are hand-searching for weights that separate the classes. That is exactly the job training does - it just does it automatically by measuring error and nudging.</p></div>
+      <div class="step"><p>Now imagine this with three dials replaced by millions, across many layers, and no human touching them. The network finds them by rolling downhill toward less error. You just felt, by hand, what a GPU does a trillion times.</p></div>
+    </div>
+    <div class="callout tip">
+      <strong>The debrief</strong>
+      Two dots and one line took you real effort. A face recognizer tunes hundreds of millions of these weights. Nobody could hand-set them - which is precisely why the finished model is a black box. You did not read a rulebook; you searched for numbers that worked.
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Sketch the feature ladder <span class="tag demo">★ 6 min · everyone sketches</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Pick one task as a table: spot a cat in a photo, read the total off a receipt, or detect a fraudulent transaction.</p></div>
+      <div class="step"><p>Sketch the ladder a deep net might climb. Low level: what raw signals go in? Mid level: what small patterns build from those? High level: what does the final answer look like?</p></div>
+      <div class="step"><p>For the receipt: pixels to edges to digits to "the number after the word total". For fraud: raw fields to "unusual amount" and "new location" to "risky combination".</p></div>
+      <div class="step"><p>Now try to name every mid-level feature precisely. You cannot always - the model may invent features with no human name. That gap, right there, is the black box you will govern in Session 8.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>Black box: OK or not OK? <span class="tag demo">★ 6 min · room votes</span></h2>
+    </div>
+    <p class="lede">Four real use cases. For each, the room votes: is an unexplainable "black box" answer acceptable here, or does someone deserve a reason?</p>
+    <div class="steps">
+      <div class="step"><p><strong>Movie recommendation.</strong> Vote. Most rooms say black box is fine - low stakes, easy to ignore a bad pick.</p></div>
+      <div class="step"><p><strong>Resume screening.</strong> Vote. Now it gets uncomfortable - a rejected candidate and an employment regulator may both want the reason.</p></div>
+      <div class="step"><p><strong>Tumor flag on a scan.</strong> Vote. A doctor needs to know what the model saw to trust or overrule it; a pure black box is hard to sign off on.</p></div>
+      <div class="step"><p><strong>Ad targeting.</strong> Vote, then name what forces explainability in each case - regulation (lending, hiring, health), ethics, or a customer who will simply ask "why?". Carry this into Session 8.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>Lending regulators in many countries require a lender to give the specific reasons for a denial. That single rule quietly rules out the most opaque deep models for credit decisions, or forces a reason-producing layer on top. The technology is legal; the un-explainability is what the law will not accept.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Beat the neuron:</strong> reopen Apply-along 1 and get a clean 100% from a random start. Notice how much the bias alone changes the line - that is the "shift the threshold" move.</li>
+      <li><strong>Ladder one real system</strong> from your work: name a low, mid, and high level feature it would need, and circle any you cannot name.</li>
+      <li><strong>Read the self-study cards</strong> above: activation functions (why layers bend the line), and overfitting / train-test in deep learning.</li>
+      <li><strong>Optional deep end:</strong> look up the 2012 ImageNet result and the error-rate chart. Five minutes that explain why the whole field pivoted.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What does a single artificial neuron actually compute?</p>
+      <button class="qopt" type="button">A · A copy of a human brain cell, chemistry and all</button>
+      <button class="qopt" type="button">B · A weighted sum of its inputs plus a bias, then fires if that total clears a threshold</button>
+      <button class="qopt" type="button">C · A random guess it never changes</button>
+      <p class="qwhy">Inputs times weights, add a bias, compare to a threshold. One neuron draws one straight decision line - simple arithmetic, not biology.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · In "deep learning", what does "deep" mean?</p>
+      <button class="qopt" type="button">A · The model thinks deeply, like a philosopher</button>
+      <button class="qopt" type="button">B · It was trained on very deep, complex topics</button>
+      <button class="qopt" type="button">C · It has many hidden layers, each learning higher-level features from the layer before</button>
+      <p class="qwhy">"Deep" is just a count of layers. Pixels to edges to parts to object - each layer builds on the last. More layers, more capability.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What is the core tradeoff of adding more layers and data to a deep net?</p>
+      <button class="qopt" type="button">A · More capability but less explainability - it works, and it cannot fully tell you why</button>
+      <button class="qopt" type="button">B · More capability and more explainability at the same time</button>
+      <button class="qopt" type="button">C · Less capability but a cleaner rulebook</button>
+      <p class="qwhy">Millions of weights have no readable rulebook. Fine for movie picks; not fine for loan denials, where a person deserves a reason. Match the box to the stakes.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">Working intuition of each idea, credited to the canon. Leaders get the judgment; practitioners get the Self-study lane and the names to go deeper.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Neuron = weighted sum + threshold; weights</span><span class="note">the smallest part - Part 1 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Layers and what "deep" means</span><span class="note">stacking neurons, the feature ladder - Part 1 and 2 + Apply-along 2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Training as gradient descent (intuition)</span><span class="note">show, measure error, nudge weights downhill, repeat - Part 3 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The 2012 ImageNet / AlexNet moment</span><span class="note">old ideas + big data + GPUs - Part 2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">CNNs for vision</span><span class="note">named at intuition - the image workhorse, Part 2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Activation functions (nonlinearity)</span><span class="note">self-study card - why layers get to bend the line</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The neuron</b><span>Inputs times weights, add a bias, fire past a threshold. One neuron draws one straight line - a decision boundary.</span></div>
+      <div class="cheat-item"><b>Weights = importance</b><span>A big weight means "this input matters"; near zero means "ignore it". Learning = adjusting the weights, never by hand.</span></div>
+      <div class="cheat-item"><b>Why "deep"</b><span>Many hidden layers. Each learns higher-level features: pixels → edges → parts → object. The model builds its own ladder.</span></div>
+      <div class="cheat-item"><b>Training</b><span>Show an example, measure error, nudge weights toward less wrong, repeat millions of times. Gradient descent = roll downhill.</span></div>
+      <div class="cheat-item"><b>Why 2012</b><span>AlexNet won ImageNet. New fuel, not new idea: massive labeled data + GPUs. The field pivoted overnight.</span></div>
+      <div class="cheat-item"><b>Black-box tradeoff</b><span>More layers = more capability, less explainability. Fine for movie picks; not for loan denials. Match the box to the stakes.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 2 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="01-what-ai-is.html">← Prev: What AI actually is</a> &nbsp;·&nbsp; <a href="03-embeddings.html">Next: Embeddings: how machines read meaning →</a> &nbsp;·&nbsp; <a href="../index.html">← All sessions</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

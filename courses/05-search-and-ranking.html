@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 5 · Search and ranking - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 5 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 5 of 8</div>
+    <h1>Search and ranking: <span class="accent">who decides what comes first</span></h1>
+    <p class="sub">Search moved from matching words to matching meaning - and the moment more than one result matches, someone has to decide the order. This session shows how semantic search uses the embeddings from Session 3, why ranking is a set of weight choices rather than an objective truth, and how the same search machinery, pointed at your own documents, becomes RAG - the single most common way enterprises put GenAI to work. No code, no math.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Core</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>From finding to ordering</h2>
+    </div>
+    <p class="lede">Session 3 gave us embeddings - the trick of turning words and documents into points in a meaning-space, where closeness means similar meaning. Search is where that trick pays off in public. But finding matches is only half the job: the instant a query returns fifty results, the real question is which one goes first. That ordering is not handed down by nature - it is a weighted blend of signals that a human chose, and changing the weights changes what wins. Get literate about that and you can read any feed, any results page, any "the algorithm changed" headline. Then we point search at your own documents and get RAG, the pattern behind most enterprise GenAI.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The difference between keyword and semantic search (and why the best systems use both), the truth that there is no objective #1 result - ranking is a weighted sum of signals someone chose - and a working grip on RAG: feed your own documents to an LLM as context so it answers grounded in your data instead of making things up. Plus the lesson that keeps returning: search quality is a data quality problem.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: KEYWORD TO SEMANTIC ============ -->
+  <section class="section" id="semantic">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · matching meaning, not just words</span>
+      <h2>From keyword to semantic search <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Old search matched the letters you typed. If you searched "won't turn on" and the manual said "power failure", keyword search shrugged - no shared words. Semantic search fixes exactly this by comparing meaning using embeddings (Session 3): both phrases land near each other in meaning-space, so the right answer surfaces even with zero words in common.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left lane: keyword search matches exact strings and misses synonyms. Right lane: semantic search matches by embedding distance and catches meaning.">
+        <style>
+          .kmT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .kmL { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .kmX { font: 400 12px Inter, sans-serif; fill: #1E1B2E; }
+          .kmM { font: 400 11.5px Inter, sans-serif; fill: #6B6785; }
+          .kmBad { font: 700 12px Inter, sans-serif; fill: #B42318; }
+          .kmOk { font: 700 12px Inter, sans-serif; fill: #4C1D95; }
+        </style>
+        <rect x="20" y="20" width="410" height="288" rx="16" fill="#EDE9FE"/>
+        <rect x="450" y="20" width="410" height="288" rx="16" fill="#EDE9FE"/>
+        <rect x="20" y="20" width="410" height="40" rx="16" fill="#6D28D9"/>
+        <rect x="450" y="20" width="410" height="40" rx="16" fill="#06B6D4"/>
+        <text class="kmT" x="225" y="46">Keyword: match the words</text>
+        <text class="kmT" x="655" y="46" style="fill:#053640">Semantic: match the meaning</text>
+        <text class="kmX" x="44" y="92">Query: "won't turn on"</text>
+        <rect x="44" y="108" width="360" height="30" rx="8" fill="#7C3AED"/>
+        <text class="kmL" x="58" y="128">Doc says: "power failure"</text>
+        <text class="kmBad" x="44" y="168">No shared words -&gt; miss</text>
+        <text class="kmX" x="44" y="206">Query: "error 501"</text>
+        <rect x="44" y="222" width="360" height="30" rx="8" fill="#7C3AED"/>
+        <text class="kmL" x="58" y="242">Doc says: "error 501"</text>
+        <text class="kmOk" x="44" y="282">Exact code -&gt; perfect hit</text>
+        <text class="kmX" x="474" y="92">Query: "won't turn on"</text>
+        <rect x="474" y="108" width="360" height="30" rx="8" fill="#4C1D95"/>
+        <text class="kmL" x="488" y="128">Doc says: "power failure"</text>
+        <text class="kmOk" x="474" y="168">Close in meaning-space -&gt; found</text>
+        <text class="kmM" x="474" y="206">Understands synonyms, phrasing,</text>
+        <text class="kmM" x="474" y="224">and typos - not just letters.</text>
+        <text class="kmM" x="474" y="262">Weaker on exact codes and names,</text>
+        <text class="kmM" x="474" y="280">where the literal string is the point.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - words on the left, meaning on the right - each wins somewhere</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why semantic wins - and where keyword still rules<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Keyword search</strong> matches literal strings. Fast, exact, and blind to meaning: "car" will not find "automobile", and "won't turn on" will not find "power failure".</li>
+          <li><strong>Semantic search</strong> embeds the query and the documents into meaning-space (Session 3) and returns the nearest ones. It catches synonyms, paraphrases, and even typos, because it compares meaning, not spelling.</li>
+          <li><strong>Semantic wins</strong> whenever people ask in their own words - support tickets, natural-language questions, "the thing that does X".</li>
+          <li><strong>Keyword still matters</strong> when the literal string is the answer: product codes, part numbers, error codes, names, legal citations. You want an exact match, not a close-in-meaning one.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A support team swapped keyword-only search on their help centre for semantic search and watched deflection jump: customers typing "my screen is frozen" finally reached the "unresponsive display" article that shared not one word with their query. The articles did not change - only how meaning was matched.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Hybrid search: why real systems combine both<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In practice almost no serious system is purely one or the other. <strong>Hybrid search</strong> runs keyword and semantic together and merges the results, then layers <strong>filters</strong> on top (in stock, this region, published after a date, this permission level). Keyword guarantees the exact-match cases semantic can fumble; semantic rescues the natural-language cases keyword misses; filters enforce the hard constraints that must never be violated regardless of relevance. When someone says "we added AI search", they usually mean they added the semantic lane beside the keyword one - not that they threw keyword away. The literate expectation is a blend, tuned per use case.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: RANKING = SIGNALS ============ -->
+  <section class="section" id="ranking">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · there is no objective first place</span>
+      <h2>Ranking = weighted signals <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Search finds many matches; ranking decides their order. And here is the idea that reframes every results page and every feed: the order is a weighted sum of signals - relevance, freshness, popularity, personalization, authority - and the weights are choices a human made. There is no objective #1. Change the weights and a different result wins. You will feel this directly in the tuner below.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The signal mixer, and who sets the weights<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Ranking blends signals.</strong> Typical ones: relevance (how well it matches), freshness (how recent), popularity (how many liked or clicked it), personalization (how well it fits you), and authority (how trusted the source).</li>
+          <li><strong>The order is a weighted sum.</strong> Each signal gets a weight; multiply, add, sort. Crank freshness and today's post beats last year's classic; crank popularity and the crowd's favorite jumps to the top.</li>
+          <li><strong>There is no objective #1.</strong> "Best result" is undefined without a weighting. Someone at the company decided those weights, and that decision has consequences - it is a product and business choice, not a fact about the world.</li>
+          <li><strong>"The algorithm changed"</strong> almost always means the weights changed. A feed did not gain a soul overnight; a team re-tuned the mix, and what surfaces shifted.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>An entire industry - SEO - exists purely because ranking weights have money attached. Businesses reverse-engineer what a search engine appears to reward (fresh content, links from trusted sites, mobile speed) and reshape themselves to score higher. That whole economy is downstream of one truth: the ranking is a set of weights someone chose, and moving up the list is worth real revenue.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Personalization: the signal that splits the results page<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Personalization is the ranking signal that quietly makes your results page different from mine for the same query. It folds in your history, location, device, and past clicks - the same behavioral signals we met in Session 4. Used well, it is genuinely helpful: a search for "python" returns snakes for the zoologist and code for the developer. Used carelessly, it recreates the filter-bubble risk from recommendations - the results narrow to confirm what you already engage with, and two people can no longer even see the same "facts" from the same search. The literate view: personalization is a weight like any other, powerful and worth auditing, not a neutral convenience.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: RAG ============ -->
+  <section class="section" id="rag">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · search feeding an LLM</span>
+      <h2>RAG: search feeding an LLM <span class="tag concept">4 min live</span></h2>
+    </div>
+    <p class="lede">Here is where search becomes the backbone of enterprise AI. Retrieval-augmented generation (RAG) is a simple pipeline: search your own documents for the passages relevant to a question, hand those passages to an LLM as context, and let it answer grounded in your data instead of its training memory. It is the dominant pattern for putting GenAI to work - and it makes the point of Sessions 6 and 7 early: the model is only as good as what you retrieve for it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RAG pipeline: a question is embedded, used to retrieve the top documents, which an LLM reads to produce a grounded answer.">
+        <style>
+          .rgT { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .rgS { font: 400 10.5px Inter, sans-serif; fill: #FFFFFF; opacity: .9; text-anchor: middle; }
+          .rgC { font: 700 12.5px Inter, sans-serif; fill: #053640; text-anchor: middle; }
+          .rgCs { font: 400 10.5px Inter, sans-serif; fill: #053640; text-anchor: middle; }
+          .rgX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+        </style>
+        <defs>
+          <marker id="rgAr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.6"/>
+          </marker>
+        </defs>
+        <rect x="20" y="70" width="130" height="60" rx="12" fill="#4C1D95"/>
+        <text class="rgT" x="85" y="96">Question</text>
+        <text class="rgS" x="85" y="114">what a user asks</text>
+        <rect x="188" y="70" width="130" height="60" rx="12" fill="#6D28D9"/>
+        <text class="rgT" x="253" y="96">Embed</text>
+        <text class="rgS" x="253" y="114">to meaning-space</text>
+        <rect x="356" y="70" width="150" height="60" rx="12" fill="#7C3AED"/>
+        <text class="rgT" x="431" y="96">Retrieve top docs</text>
+        <text class="rgS" x="431" y="114">nearest passages</text>
+        <rect x="544" y="70" width="130" height="60" rx="12" fill="#4C1D95"/>
+        <text class="rgT" x="609" y="96">LLM reads</text>
+        <text class="rgS" x="609" y="114">docs as context</text>
+        <rect x="712" y="70" width="148" height="60" rx="12" fill="#06B6D4"/>
+        <text class="rgC" x="786" y="96">Grounded answer</text>
+        <text class="rgCs" x="786" y="114">cites your data</text>
+        <line x1="150" y1="100" x2="186" y2="100" stroke="#CFC9E6" stroke-width="3" marker-end="url(#rgAr)"/>
+        <line x1="318" y1="100" x2="354" y2="100" stroke="#CFC9E6" stroke-width="3" marker-end="url(#rgAr)"/>
+        <line x1="506" y1="100" x2="542" y2="100" stroke="#CFC9E6" stroke-width="3" marker-end="url(#rgAr)"/>
+        <line x1="674" y1="100" x2="710" y2="100" stroke="#CFC9E6" stroke-width="3" marker-end="url(#rgAr)"/>
+        <text class="rgX" x="20" y="180">Retrieval is Parts 1-2 of this session: embed, search, rank. RAG just hands the winners to the model.</text>
+        <text class="rgX" x="20" y="206">Garbage retrieval = garbage answer. Search quality caps answer quality - the AI project is a data project.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - question in, grounded answer out, search doing the heavy lifting</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why RAG is the dominant enterprise pattern<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The move:</strong> retrieve the handful of your documents most relevant to a question, paste them into the model's context, and ask it to answer using them. The model reads your data at answer-time instead of relying on what it happened to memorize.</li>
+          <li><strong>Why it wins:</strong> it grounds answers in your current, private, authoritative content - policy docs, product manuals, tickets - so the model is far less likely to hallucinate (Session 6) and can cite where it got each fact.</li>
+          <li><strong>Why it is everywhere:</strong> no retraining, no fine-tuning, update the answer by updating the documents. That low cost and freshness is why RAG, not fine-tuning, is the default first build for enterprise GenAI (Sessions 6-7 go deeper).</li>
+          <li><strong>The catch:</strong> the answer can only be as good as what you retrieved. Miss the relevant passage and even the best model confidently answers from the wrong context. Search quality caps answer quality.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          When a team proposes an internal AI assistant, do not start with "which model?" - start with "which documents will it retrieve from, and how clean and current are they?" That question decides the project's ceiling before a single prompt is written.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Chunking, and why retrieval is mostly data prep<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Before documents can be retrieved they are split into <strong>chunks</strong> - passages small enough to embed and hand to the model, big enough to carry a complete thought. Chunk too large and retrieval returns a wall of mostly-irrelevant text that crowds the context; chunk too small and you sever the sentence that held the answer. Getting this right - plus cleaning, de-duplicating, and keeping documents current - is where most of the real RAG effort goes. It is the same lesson the data literacy course hammered: 60-80% of the work is data preparation, not modeling. A RAG system is a search system, and a search system is only as good as the corpus you feed it. The AI project is, once again, a data project.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>The same results, your priorities <span class="tag demo">★ 10 min · everyone plays</span></h2>
+    </div>
+    <p class="lede">Five results, three signals. Move the weights and watch the order change in real time. This is the whole idea of Part 2 in your hands: there is no objective best, only your weighting.</p>
+    <div class="widget" data-widget="rankingtuner" data-config='{"title": "★ Ranking tuner - the same results, your priorities", "intro": "Five results, three signals. Move the weights and watch the order change. There is no objective best - only your weighting."}'></div>
+    <div class="steps">
+      <div class="step"><p>Crank relevance to the max and everything else to zero. Note the #1. Now do the same for freshness only, then popularity only. Watch #1 change each time - same results, different winner.</p></div>
+      <div class="step"><p>Try to bury the exact-match, highly-relevant doc beneath the others by leaning hard on freshness and popularity. It is unsettlingly easy - and that is the point.</p></div>
+      <div class="step"><p>Discuss: in a real product, who decides these weights? What does it mean that the "best" result is really someone's priority list encoded as numbers?</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Design your search <span class="tag demo">★ 6 min · everyone designs</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Pick a search box in your world - internal docs, a product catalog, a support-ticket archive. Write down what people actually type into it.</p></div>
+      <div class="step"><p>Rank the signals by importance for that box: relevance, freshness, popularity, personalization, authority. Which matters most here?</p></div>
+      <div class="step"><p>Find the case where freshness should outweigh relevance (a status page, breaking policy) - and a case where chasing freshness would hurt (evergreen how-to docs, legal reference).</p></div>
+      <div class="step"><p>Share your weighting. Notice that two sensible people design different rankings for the same box - because ranking is a choice, not a truth.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>RAG readiness <span class="tag demo">★ 6 min · everyone audits</span></h2>
+    </div>
+    <p class="lede">If you built an internal AI assistant tomorrow, what would it read from - and is that content ready?</p>
+    <div class="steps">
+      <div class="step"><p>List the document sources you would want an internal assistant to answer from: wikis, policy docs, product manuals, past tickets, contracts.</p></div>
+      <div class="step"><p>Rate each source on how clean and current it is - fresh and well-structured, or stale, duplicated, and scattered across five tools?</p></div>
+      <div class="step"><p>Circle the sources that are not ready. Those are the ceiling on your assistant's answers - garbage retrieval, garbage answer.</p></div>
+      <div class="step"><p>Land the realization one more time: the AI project is a data project. The model is the easy part; the corpus is the work.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>Teams that launch an internal "ask our docs" assistant and are disappointed almost always find the fault in retrieval, not the model: outdated PDFs, three conflicting versions of the same policy, documents nobody had tagged. The ones that succeed spent their first month cleaning and chunking the corpus - proving, again, that search quality is data quality.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Keyword or semantic?</strong> Notice a search this week that clearly understood your meaning (or clearly did not). Which lane failed you, and would the other have saved it?</li>
+      <li><strong>Finish your ranking design</strong> from Apply-along 2 - write the signal weights for one real search box and the freshness-vs-relevance edge case.</li>
+      <li><strong>Do the RAG-readiness audit</strong> from Apply-along 3 - list your sources and honestly rate each on clean-and-current.</li>
+      <li><strong>Read the self-study cards</strong> above: hybrid search, personalization, and chunking.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · What is the difference between keyword and semantic search?</p>
+      <button class="qopt" type="button">A · Keyword is old and useless; semantic replaced it entirely</button>
+      <button class="qopt" type="button">B · Semantic search is faster because it uses fewer words</button>
+      <button class="qopt" type="button">C · Keyword matches the literal words; semantic matches meaning using embeddings, so "won't turn on" can find "power failure" - and keyword still wins for exact codes and names</button>
+      <p class="qwhy">Semantic compares meaning in embedding-space; keyword compares the literal string. Each wins somewhere, so real systems blend both (hybrid search).</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Why is there no objective "#1 result"?</p>
+      <button class="qopt" type="button">A · Ranking is a weighted sum of signals (relevance, freshness, popularity, and more), and the weights are choices a human made - change the weights and a different result wins</button>
+      <button class="qopt" type="button">B · Because search engines pick the #1 result at random for fairness</button>
+      <button class="qopt" type="button">C · Because the internet is too big to sort</button>
+      <p class="qwhy">"Best" is undefined without a weighting. Someone chose those weights - which is why "the algorithm changed" usually just means the weights changed.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · What does RAG do, and why does it reduce hallucination?</p>
+      <button class="qopt" type="button">A · It retrains the model on your data every night</button>
+      <button class="qopt" type="button">B · It searches your own documents and feeds the top passages to the LLM as context, so the answer is grounded in your data rather than the model's memory</button>
+      <button class="qopt" type="button">C · It blocks the model from answering anything it is unsure about</button>
+      <p class="qwhy">Retrieval-augmented generation grounds the answer in retrieved documents, so the model has the facts in front of it - reducing (not eliminating) hallucination. Answer quality is capped by retrieval quality.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">This course teaches the working intuition of each idea and credits the canon. Leaders get judgment; practitioners get the Self-study lane and the names to go deeper.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Keyword vs semantic search</span><span class="note">letters vs meaning, embeddings again - Part 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ranking signals</span><span class="note">weighted sum, no objective #1 - Part 2 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">RAG</span><span class="note">search feeding an LLM, grounded answers - Part 3 + Apply-along 3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Hybrid search</span><span class="note">self-study card - keyword + semantic + filters combined</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Chunking</span><span class="note">self-study card - retrieval as a data-prep problem</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Personalization signals</span><span class="note">self-study card - the weight that splits the results page</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Keyword vs semantic</b><span>Keyword matches literal words; semantic matches meaning via embeddings. "Won't turn on" finds "power failure". Keyword still wins for exact codes and names.</span></div>
+      <div class="cheat-item"><b>Hybrid search</b><span>Real systems run keyword + semantic together and add filters. "AI search" usually means the semantic lane was added, not that keyword was dropped.</span></div>
+      <div class="cheat-item"><b>Ranking = weighted signals</b><span>Order = weighted sum of relevance, freshness, popularity, personalization, authority. No objective #1 - just a chosen weighting.</span></div>
+      <div class="cheat-item"><b>"The algorithm changed"</b><span>Almost always means the weights changed. SEO is a whole industry built on ranking weights having business consequences.</span></div>
+      <div class="cheat-item"><b>RAG</b><span>Search your docs, feed the top passages to an LLM as context - grounded answers, less hallucination, no retraining. The dominant enterprise GenAI pattern.</span></div>
+      <div class="cheat-item"><b>Search quality = data quality</b><span>Answer quality is capped by retrieval. Chunking and clean, current docs are the work. The AI project is a data project.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 5 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="04-recommendations.html">← Recommendations</a> &nbsp;·&nbsp; <a href="06-how-llms-work.html">Next: How LLMs work →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 8 · AI strategy and risk - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 8 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 8 of 8</div>
+    <h1>AI strategy and risk: <span class="accent">turn understanding into decisions</span></h1>
+    <p class="sub">The capstone. Seven sessions gave you how AI works; this one turns that into the three decisions a leader actually makes - build, buy, or call an API; which risks must be checked before anything ships; and where AI ROI is real versus hype. You leave with a use-case scorecard and a one-page adoption memo you can hand to a decision-maker on Monday.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Capstone</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The capstone: from understanding to decisions</h2>
+    </div>
+    <p class="lede">You now know the dolls (Session 1), how neural nets learn (2), embeddings (3), recommendations (4), search (5), how LLMs work (6), and how to use GenAI well (7). Knowing is not deciding. A leader is paid for three calls: how do we get AI (build, buy, or API), what could go wrong (the risk grid), and is it even worth it (ROI versus hype). This session is those three calls, plus the two artifacts that carry them into a real organisation - a scored use-case and a one-page memo. No code, all judgment.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The build-buy-API decision (API-first, build only your true edge), the five-risk grid every deployment must clear with a one-line mitigation each, the honest ROI test (augment expensive human time, not "AI for its own sake"), and two take-home artifacts - a scored use-case and a one-page adoption memo answer-first like the Minto pyramid from strategic thinking.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: BUILD BUY API ============ -->
+  <section class="section" id="build-buy-api">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · how do we get AI</span>
+      <h2>Build, buy, or API? <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">There are three ways to put AI in your product, and they trade off the same way every make-or-buy decision does. Call an API (fast, pay per use, least control, no moat), buy a product (a vendor owns it and fits a workflow), or build your own models and pipelines (expensive, slow, but yours). The literate default: API-first for almost everything, and build only the one thing that is genuinely your edge.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decision strip: is AI your core differentiator - no leads to API or buy, yes with data and talent leads to build">
+        <style>
+          .dcT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; text-anchor: middle; }
+          .dcS { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .9; text-anchor: middle; }
+          .dcQ { font: 700 13px Inter, sans-serif; fill: #1E1B2E; text-anchor: middle; }
+          .dcX { font: 400 11.5px Inter, sans-serif; fill: #6B6785; text-anchor: middle; }
+          .dcL { stroke: #CFC9E6; stroke-width: 2.5; fill: none; marker-end: url(#dcAh); }
+        </style>
+        <defs>
+          <marker id="dcAh" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <rect x="310" y="24" width="260" height="52" rx="14" fill="#EDE9FE"/>
+        <text class="dcQ" x="440" y="46">Is AI your core differentiator?</text>
+        <text class="dcX" x="440" y="64">the one thing customers pay you for</text>
+        <line class="dcL" x1="360" y1="76" x2="180" y2="132"/>
+        <line class="dcL" x1="520" y1="76" x2="700" y2="132"/>
+        <text class="dcX" x="250" y="108">no (most cases)</text>
+        <text class="dcX" x="640" y="108">yes, and you have data + talent</text>
+        <rect x="40" y="140" width="240" height="96" rx="14" fill="#6D28D9"/>
+        <text class="dcT" x="160" y="168">Call an API</text>
+        <text class="dcS" x="160" y="188">OpenAI, Anthropic, others</text>
+        <text class="dcS" x="160" y="206">ship in a week, pay per use</text>
+        <text class="dcS" x="160" y="224">least control, no moat</text>
+        <rect x="300" y="140" width="240" height="96" rx="14" fill="#7C3AED"/>
+        <text class="dcT" x="420" y="168">Buy a product</text>
+        <text class="dcS" x="420" y="188">a vendor owns the model</text>
+        <text class="dcS" x="420" y="206">fits a known workflow</text>
+        <text class="dcS" x="420" y="224">fast, but you rent the edge</text>
+        <rect x="600" y="140" width="240" height="96" rx="14" fill="#06B6D4"/>
+        <text class="dcT" x="720" y="168" style="fill:#053640">Build it</text>
+        <text class="dcS" x="720" y="188" style="fill:#053640">own models + pipelines</text>
+        <text class="dcS" x="720" y="206" style="fill:#053640">expensive, slow, defensible</text>
+        <text class="dcS" x="720" y="224" style="fill:#053640">only when AI IS the edge</text>
+        <text class="dcX" x="160" y="272" style="font-weight:700;fill:#1E1B2E">speed ●●●</text>
+        <text class="dcX" x="160" y="290">control ● · cost per call</text>
+        <text class="dcX" x="420" y="272" style="font-weight:700;fill:#1E1B2E">speed ●●</text>
+        <text class="dcX" x="420" y="290">control ●● · licence cost</text>
+        <text class="dcX" x="720" y="272" style="font-weight:700;fill:#1E1B2E">speed ●</text>
+        <text class="dcX" x="720" y="290">control ●●● · build + run cost</text>
+        <text class="dcX" x="440" y="318">Rule of thumb: API-first, buy for a workflow, build only your true differentiator.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three ways to get AI, and when each earns its cost</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why API-first wins for almost everything<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Call an API</strong> when you want capability now. A foundation model (Session 6) behind a paid endpoint ships in days, costs per call, and needs no ML team. The tradeoff: you have the least control and no moat - so does every competitor calling the same endpoint.</li>
+          <li><strong>Buy a product</strong> when a vendor has already wrapped AI into your exact workflow (support desk, contract review). You get speed and a supported tool, but you rent the edge and inherit the vendor's roadmap and pricing.</li>
+          <li><strong>Build</strong> only when AI itself is your differentiator and you have the data and talent to sustain it. Owning models and pipelines is expensive and slow - justified when a better model is literally the product, not a feature of it.</li>
+          <li><strong>The default:</strong> API-first for capability, buy for a solved workflow, build for the one thing customers pay you for. Most organisations should API almost everything and build almost nothing.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The common, expensive mistake: a team spends two quarters training a custom text classifier when a single API call would have shipped the same quality in a week - burning the budget on plumbing, not product. The rarer but sharper mistake runs the other way: putting your actual moat behind someone else's API, so a pricing change or a shut-down endpoint can end your differentiator overnight. Match the method to whether AI is a feature or the edge.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The hidden costs of "just build it"<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The build column hides costs that do not show up in the pitch: you need data pipelines that stay clean, a team that can retrain when the model drifts, evaluation harnesses (Session 7), and someone on call when it breaks at 2am. An API price is a line item; a built model is a standing team. That is why "build" is reserved for your true differentiator - the place where owning the edge is worth carrying that whole organisation. Everywhere else, renting capability is not a compromise, it is the correct answer.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: RISK GRID ============ -->
+  <section class="section" id="risk-grid">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · what could go wrong</span>
+      <h2>The risk grid <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Every AI deployment must clear the same five checks before it ships. Name the risk, give a concrete example, attach a one-line mitigation. None of these are exotic - they are the predictable failure modes of probabilistic systems trained on human data. The cross-cutting control that shows up in almost every mitigation is the same one: a human in the loop before anything irreversible happens.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five-cell risk grid: hallucination, bias, privacy, IP and copyright, security, each with example and mitigation">
+        <style>
+          .rgH { font: 700 12px Inter, sans-serif; fill: #6B6785; }
+          .rgT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .rgX { font: 400 11.5px Inter, sans-serif; fill: #1E1B2E; }
+          .rgM { font: 400 11.5px Inter, sans-serif; fill: #B42318; }
+        </style>
+        <text class="rgH" x="24" y="28">Risk</text>
+        <text class="rgH" x="230" y="28">What it looks like</text>
+        <text class="rgH" x="560" y="28">One-line mitigation</text>
+        <rect x="24" y="40" width="180" height="44" rx="9" fill="#4C1D95"/>
+        <text class="rgT" x="38" y="67">Hallucination</text>
+        <text class="rgX" x="230" y="67">Confident, fluent, wrong facts.</text>
+        <text class="rgM" x="560" y="67">Ground in your data (RAG) + cite + human check.</text>
+        <rect x="24" y="94" width="180" height="44" rx="9" fill="#6D28D9"/>
+        <text class="rgT" x="38" y="121">Bias</text>
+        <text class="rgX" x="230" y="121">Unfair patterns learned from data.</text>
+        <text class="rgM" x="560" y="121">Test across groups; monitor outcomes, not intent.</text>
+        <rect x="24" y="148" width="180" height="44" rx="9" fill="#7C3AED"/>
+        <text class="rgT" x="38" y="175">Privacy</text>
+        <text class="rgX" x="230" y="175">Sensitive data goes in - where does it go?</text>
+        <text class="rgM" x="560" y="175">Know the data path; minimise; use no-train terms.</text>
+        <rect x="24" y="202" width="180" height="44" rx="9" fill="#6D28D9"/>
+        <text class="rgT" x="38" y="229">IP / copyright</text>
+        <text class="rgX" x="230" y="229">Training data + outputs - who owns them?</text>
+        <text class="rgM" x="560" y="229">Check licence + indemnity; review generated assets.</text>
+        <rect x="24" y="256" width="180" height="44" rx="9" fill="#4C1D95"/>
+        <text class="rgT" x="38" y="283">Security</text>
+        <text class="rgX" x="230" y="283">Prompt injection, data leakage.</text>
+        <text class="rgM" x="560" y="283">Isolate inputs; least privilege; never trust output.</text>
+        <rect x="24" y="312" width="832" height="20" rx="6" fill="#06B6D4"/>
+        <text x="440" y="326" style="font: 700 11.5px Inter, sans-serif; fill:#053640; text-anchor:middle">Cross-cutting control: a human in the loop before anything irreversible ships.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five risks, five mitigations, one control under all of them</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The five checks, one line each<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Hallucination</strong> - the model states wrong facts fluently (Session 6). Mitigation: ground it in your own data with retrieval, require citations, and keep a human check on anything that acts on the output.</li>
+          <li><strong>Bias</strong> - the model learns unfair patterns from historical data. Mitigation: test outputs across groups and monitor real outcomes, because the bias hides in results, not intentions.</li>
+          <li><strong>Privacy</strong> - what data goes in, and where does it travel? Mitigation: map the data path before you ship, send the minimum, and use vendor terms that forbid training on your data.</li>
+          <li><strong>IP and copyright</strong> - questions on both sides, the training data and the outputs you generate. Mitigation: check licence and indemnity terms and review generated assets before they go public.</li>
+          <li><strong>Security</strong> - prompt injection (a webpage or document telling your AI to misbehave) and data leakage. Mitigation: isolate untrusted inputs, give the system least privilege, and never treat model output as trusted.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>A well-known hiring tool was trained on a decade of past resumes and quietly learned to downrank a group that had historically been under-hired - the bias lived in the training data, not anyone's intent, and it shipped because no one tested outcomes across groups. A simple review gate (compare pass rates by group before go-live) would have caught it in an afternoon. The same gate catches a chatbot about to leak one customer's data to another: a human check between "the model produced this" and "it reached a person" is the cheapest insurance in AI.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: ROI GOVERNANCE ============ -->
+  <section class="section" id="roi-governance">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · is it worth it</span>
+      <h2>ROI, governance, and the scorecard <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Not every AI project should exist. ROI is real in a few repeatable shapes and hype everywhere else, and the difference is knowable before you spend. Then a little governance - an owner, a gate, an eval, a kill switch - is what keeps a good use case from becoming a bad headline. And an honest boundary: this is where the literacy arc ends, not where building begins.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Real ROI, thin governance, honest boundary<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Where ROI is real:</strong> augmenting expensive human time (draft, summarise, triage so an expert reviews instead of starts from scratch), handling messy human input at scale (free text, images, speech - the dolls that earn their cost), and personalisation that would be impossible by hand.</li>
+          <li><strong>Where it is hype:</strong> AI for its own sake because the board asked for "an AI strategy", or replacing a rule that already works (the right-tool test from Session 1 - a spreadsheet does not need a model).</li>
+          <li><strong>Lightweight governance:</strong> an approval gate before ship, a named owner who is accountable, an eval with a bar (Session 7), and a kill switch to turn it off fast. Four things, not a committee.</li>
+          <li><strong>The honest boundary:</strong> this course is literacy - understand, evaluate, decide, govern. It is not an ML engineering course. Where to go next: hands-on builder skills, your vendor's docs, and the data-literacy course that sits underneath all of this (no clean data, no AI).</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          Before funding any AI project, ask "what expensive human time does this augment, and how will we know it worked?" If there is no expensive-time answer and no eval, it is usually hype wearing an AI sticker - send it back to the right-tool test.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The AI-adoption memo template<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The take-home artifact. One page, answer-first - the recommendation in the first line, exactly like the Minto pyramid from the strategic-thinking course. Six rows:</p>
+        <ul>
+          <li><strong>Use case</strong> - the one task, narrow and specific ("draft first-pass replies to tier-1 support tickets").</li>
+          <li><strong>Doll</strong> - which one is it really (rule / classic ML / deep learning / GenAI, from Session 1)? If a rule does it, stop here.</li>
+          <li><strong>Approach</strong> - prompt, RAG, or fine-tune (Session 7), and build / buy / API (Part 1).</li>
+          <li><strong>Risks + mitigations</strong> - the five from the grid, each with your one-line control.</li>
+          <li><strong>Eval bar</strong> - how you will measure success and the number that means "ship" (Session 7).</li>
+          <li><strong>Owner + review</strong> - the named person accountable and when it gets re-checked.</li>
+        </ul>
+        <p>If you cannot fill a row, that is the memo telling you the project is not ready - which is a useful answer, not a failure.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>The use-case scorecard <span class="tag demo">★ 10 min · everyone scores</span></h2>
+    </div>
+    <p class="lede">Take one AI idea from your Session 1 right-tool list and score it honestly. Tick only what is genuinely true. The data row is worth the most - notice why as you go.</p>
+    <div class="widget" data-widget="checklist" data-config='{
+  "title": "★ AI use-case scorecard - should you actually build this?",
+  "intro": "Score one AI idea from your Session 1 list. Tick what is TRUE.",
+  "items": [
+    {"t": "A rule or classic ML would NOT do it better/cheaper (it genuinely needs AI)", "pts": 2, "why": "the right-tool test from Session 1 - most failed AI projects skip this"},
+    {"t": "You have clean, accessible data for it (or a plan to get it)", "pts": 3, "why": "no data foundation, no AI - the Hierarchy of Needs, the single biggest predictor of success"},
+    {"t": "Success is measurable - you can define an eval and a bar", "pts": 2, "why": "you cannot ship what you cannot measure (Session 7)"},
+    {"t": "The failure mode is survivable (wrong output does not cause real harm unchecked)", "pts": 2, "why": "high-harm use cases need human-in-the-loop before they ship"},
+    {"t": "There is a named owner and a governance gate", "pts": 1, "why": "unowned AI is ungoverned AI"}
+  ],
+  "verdicts": [
+    {"min": 80, "label": "Green light - scope a pilot", "tone": "good", "note": "Genuine AI need, data ready, measurable, safe, owned. This is what a fundable AI project looks like."},
+    {"min": 50, "label": "Yellow - fix the gaps first", "tone": "mid", "note": "The unticked rows are your pre-pilot work. The data row is worth triple for a reason - start there."},
+    {"min": 0, "label": "Red - not yet (or not AI)", "tone": "bad", "note": "Low scores usually mean a rule would do it, or the data is not there. Revisit Session 1's right-tool test honestly."}
+  ]}'></div>
+    <div class="steps">
+      <div class="step"><p>Score a real idea from your Session 1 list - be honest, ticking a row you cannot defend only fools you.</p></div>
+      <div class="step"><p>Notice the data row is worth the most. Discuss why: no clean, accessible data means no AI, whatever the doll - it is the single biggest predictor of success.</p></div>
+      <div class="step"><p>A low score is a useful answer, not a failure. Red usually means a rule would do it or the data is not there - both are cheaper to learn now than after a pilot.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Run the risk grid <span class="tag demo">★ 6 min · everyone checks</span></h2>
+    </div>
+    <p class="lede">Take one AI use case - yours, or the reply-drafting example - and fill all five rows with a concrete example and a one-line mitigation for each.</p>
+    <div class="steps">
+      <div class="step"><p>Pick a use case. If you do not have one ready, use "an LLM drafts first-pass replies to customer support emails".</p></div>
+      <div class="step"><p>For each of the five risks - hallucination, bias, privacy, IP/copyright, security - write one concrete example of how it would show up in THIS use case.</p></div>
+      <div class="step"><p>Attach one mitigation per risk. Notice how often "a human reviews before it sends" is the honest answer - that is the cross-cutting control.</p></div>
+      <div class="step"><p>Flag the one risk that scares you most. That is the row your governance gate exists to catch.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>Write the adoption memo <span class="tag demo">★ 6 min · everyone drafts</span></h2>
+    </div>
+    <p class="lede">Using the self-study template, draft the one-page answer-first memo for your best use case. Recommendation first, then the six rows.</p>
+    <div class="steps">
+      <div class="step"><p>Open with the recommendation in one line - "we should pilot X using an API, with a human-review gate" - answer-first, like the Minto pyramid.</p></div>
+      <div class="step"><p>Fill the six rows: use case, doll, approach (prompt / RAG / fine-tune and build / buy / API), risks + mitigations, eval bar, owner + review.</p></div>
+      <div class="step"><p>If a row will not fill, say so in the memo - "data not yet accessible" is a finding, and it tells the decision-maker exactly what to fix first.</p></div>
+      <div class="step"><p>One volunteer reads their memo answer-first. The room grades the first sentence: could a busy executive decide from that line alone?</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>The memos that get funded are the ones a decision-maker can act on from the first sentence. "We recommend piloting AI reply-drafting for tier-1 tickets - API-based, human-reviewed, measured on handle-time" beats three pages of model detail. Answer-first is not a writing style, it is respect for the reader's time - and the fastest way to a yes.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Score the whole list:</strong> run the scorecard on your entire Session 1 right-tool list. The greens are your pilot shortlist; the reds just saved you a wasted quarter each.</li>
+      <li><strong>Write one memo for real:</strong> take your best-scoring use case and write the one-page adoption memo, answer-first, all six rows.</li>
+      <li><strong>Share it with a decision-maker:</strong> the memo is only worth writing if it reaches someone who can say yes. Send it.</li>
+      <li><strong>Where next:</strong> this is the end of the literacy arc. Next steps are hands-on builder skills and your vendor's docs - and remember the data-literacy course sits underneath everything here. No clean data, no AI.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · When should an organisation build its own AI models instead of calling an API?</p>
+      <button class="qopt" type="button">A · Whenever it can afford a data science team - building is always more capable</button>
+      <button class="qopt" type="button">B · Only when AI itself is the true differentiator and you have the data and talent to sustain it - API-first everywhere else</button>
+      <button class="qopt" type="button">C · Never - APIs are always the right answer</button>
+      <p class="qwhy">Build only your genuine edge; a built model is a standing team and cost. For everything that is a feature, not the product, API-first ships faster and cheaper.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Name a risk from the grid and its mitigation. Which pairing is correct?</p>
+      <button class="qopt" type="button">A · Hallucination - fix it by raising the temperature setting</button>
+      <button class="qopt" type="button">B · Bias - fix it by trusting the model's intent</button>
+      <button class="qopt" type="button">C · Hallucination - ground the model in your own data (RAG), require citations, and keep a human check</button>
+      <p class="qwhy">Hallucination is fluent-but-wrong output; grounding it in real data plus citations plus a human check is the standard mitigation. Bias is caught by testing outcomes across groups, not by trusting intent.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What separates real AI ROI from hype?</p>
+      <button class="qopt" type="button">A · Real ROI augments expensive human time or handles messy input at scale, with a measurable eval; hype is "AI for its own sake" or replacing a working rule</button>
+      <button class="qopt" type="button">B · Real ROI means using the newest, largest model available</button>
+      <button class="qopt" type="button">C · Real ROI is whatever the board asked for this quarter</button>
+      <p class="qwhy">ROI shows up in repeatable shapes - augmenting costly time, messy input at scale, personalisation - and you can measure it. AI with no expensive-time answer and no eval is usually a sticker on something simpler.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">The capstone pulls the whole arc together into decisions. Leaders get the three calls and the two artifacts; practitioners get the Self-study lane and the honest boundary of where literacy ends.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Build / buy / API decision</span><span class="note">API-first, build only your true edge - Part 1 + the decision strip</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The risk grid</span><span class="note">hallucination / bias / privacy / IP / security + mitigations - Part 2 + Apply-along 2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">ROI vs hype</span><span class="note">where AI value is real vs "AI for its own sake" - Part 3</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Governance &amp; human-in-the-loop</span><span class="note">owner, gate, eval, kill switch; the cross-cutting control - Part 3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The AI-adoption memo</span><span class="note">self-study template + Apply-along 3, answer-first (Minto callback)</span></div>
+      <div class="covered-row"><span class="status pill light">✗</span><span class="name">Prompt-injection security depth</span><span class="note">not covered by design - named in the risk grid; a security course goes deeper</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 8 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Build / buy / API</b><span>API-first (fast, no moat). Buy for a solved workflow. Build only your true differentiator - a built model is a standing team.</span></div>
+      <div class="cheat-item"><b>The risk grid</b><span>Hallucination, bias, privacy, IP/copyright, security. Each needs one named mitigation before ship.</span></div>
+      <div class="cheat-item"><b>Human in the loop</b><span>The cross-cutting control. A human check before anything irreversible ships is the cheapest insurance in AI.</span></div>
+      <div class="cheat-item"><b>Real ROI vs hype</b><span>Real: augment expensive time, messy input at scale, personalisation, measurable. Hype: AI for its own sake, replacing a working rule.</span></div>
+      <div class="cheat-item"><b>Thin governance</b><span>Owner + approval gate + eval with a bar + kill switch. Four things, not a committee.</span></div>
+      <div class="cheat-item"><b>The scorecard + memo</b><span>Score data highest (no data, no AI). Memo is answer-first: use case, doll, approach, risks, eval bar, owner.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 8 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="07-using-genai-well.html">← Prev: Using GenAI well</a> &nbsp;·&nbsp; <a href="../index.html">Back to all sessions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

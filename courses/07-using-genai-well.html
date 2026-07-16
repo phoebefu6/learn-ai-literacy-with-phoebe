@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 7 · Using GenAI well - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 7 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 7 of 8</div>
+    <h1>Using GenAI well: <span class="accent">prompt, ground, verify</span></h1>
+    <p class="sub">You know how an LLM works (Session 6). Now the practical craft: a prompt is a specification, not a magic spell; RAG grounds the model in your own data; and the choice between prompting, RAG and fine-tuning decides your cost and effort. Plus the discipline that separates demos from deployments - evals, so you actually know it works.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Stretch</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>From understanding to using</h2>
+    </div>
+    <p class="lede">Most people use GenAI at 10% of its value because they treat it like a search box. This session is the craft layer: how to write a prompt that gets useful output every time, how to ground the model in your company's real data so it stops guessing, when to reach for the expensive option (fine-tuning) versus the cheap ones, and how to prove a GenAI feature is good enough to ship. Leaders leave able to judge a GenAI project; practitioners leave able to shape one.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The prompt-as-specification pattern (role, task, constraints, format) that doubles output quality for free, a clear decision rule for prompt vs RAG vs fine-tune, and the habit that makes GenAI safe to ship - defining an eval before you trust it.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: PROMPTING ============ -->
+  <section class="section" id="prompting">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the free upgrade</span>
+      <h2>Prompting is specification <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">"Summarize this" and a full spec get wildly different results from the same model. A good prompt tells the model who to be, what to do, what constraints to respect, and what format to return. It is not a secret incantation - it is a clear brief, the kind you would give a sharp new hire. Give examples (few-shot) and you steer even harder.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A strong prompt broken into role, task, context, constraints and format">
+        <style>
+          .prT { font: 700 13.5px Inter, sans-serif; fill: #FFFFFF; }
+          .prS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .prX { font: 400 12.5px Inter, sans-serif; fill: #6B6785; }
+          .prH { font: 700 14px Inter, sans-serif; fill: #1E1B2E; }
+        </style>
+        <text class="prH" x="40" y="34">The five parts of a prompt that works</text>
+        <rect x="40" y="48" width="380" height="40" rx="9" fill="#4C1D95"/>
+        <text class="prT" x="56" y="66">ROLE</text>
+        <text class="prS" x="56" y="82">"You are a support manager..."</text>
+        <rect x="40" y="94" width="380" height="40" rx="9" fill="#6D28D9"/>
+        <text class="prT" x="56" y="112">TASK</text>
+        <text class="prS" x="56" y="128">"Summarize this customer email..."</text>
+        <rect x="40" y="140" width="380" height="40" rx="9" fill="#7C3AED"/>
+        <text class="prT" x="56" y="158">CONTEXT</text>
+        <text class="prS" x="56" y="174">the email itself, pasted in (or retrieved)</text>
+        <rect x="440" y="48" width="400" height="40" rx="9" fill="#7C3AED"/>
+        <text class="prT" x="456" y="66">CONSTRAINTS</text>
+        <text class="prS" x="456" y="82">"2 sentences, neutral tone, no jargon"</text>
+        <rect x="440" y="94" width="400" height="40" rx="9" fill="#06B6D4"/>
+        <text class="prT" x="456" y="112" style="fill:#053640">FORMAT</text>
+        <text class="prS" x="456" y="128" style="fill:#053640;opacity:.9">"issue on line 1, action on line 2"</text>
+        <text class="prX" x="440" y="164">Skip these and you get generic output.</text>
+        <text class="prX" x="440" y="182">Name them and the same model does far better.</text>
+        <text class="prX" x="40" y="206">Few-shot = add 1-2 worked examples. The strongest steering of all: show, do not just tell.</text>
+        <text class="prX" x="40" y="228">A prompt is a brief for a brilliant, literal, eager new hire who has no context but yours.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the anatomy of a prompt that earns its output</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Write the brief, not the wish<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Role sets the voice and expertise.</strong> "You are a pediatric nurse explaining to a worried parent" changes tone, vocabulary, and what gets emphasized - for free.</li>
+          <li><strong>Constraints do the heavy lifting.</strong> Length, audience, tone, format, and things to avoid. Vague prompts get vague output because you left every choice to the model.</li>
+          <li><strong>Examples beat adjectives.</strong> One or two worked examples (few-shot) steer harder than any pile of describing words. Show the shape you want.</li>
+          <li><strong>Iterate.</strong> First output is a draft of your prompt, not just the answer. Tighten the brief and rerun - that loop is the skill.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Teams that write a shared prompt library - a vetted, reusable prompt per common task - get consistent output across everyone, instead of each person reinventing "summarize this" badly. The prompt becomes an asset, like a document template. That is the difference between dabbling and operating.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>System vs user prompts, and prompts as assets<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In real applications there are two layers: the <strong>system prompt</strong> (set once by the builder - the persistent role, rules, and guardrails) and the <strong>user prompt</strong> (what the end user types each time). The system prompt is where you bake in "always refuse X", "answer only from provided context", "use this format" - so end users get safe, consistent behavior without having to prompt well themselves. Practitioner takeaway: treat prompts as versioned assets. Store them, test them (evals, Part 3), and change them deliberately - a prompt edit is a product change, and an untested one can quietly break output for everyone.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: PROMPT VS RAG VS FINETUNE ============ -->
+  <section class="section" id="approach">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · the money decision</span>
+      <h2>Prompt, RAG, or fine-tune? <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Three ways to make a general model fit your specific need, from cheapest to most expensive. Most teams reach for the expensive one first and waste a quarter. The rule is simple: prompt first, add RAG when it needs your facts, fine-tune only for consistent style or format at scale - and rarely.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decision tree choosing between prompting, RAG and fine-tuning">
+        <style>
+          .apT { font: 700 13px Inter, sans-serif; fill: #FFFFFF; }
+          .apS { font: 400 11px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .apQ { font: 600 12.5px Inter, sans-serif; fill: #1E1B2E; }
+          .apX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .apA { stroke: #CFC9E6; stroke-width: 2.5; fill: none; marker-end: url(#apAh); }
+        </style>
+        <defs>
+          <marker id="apAh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <text class="apQ" x="40" y="34">Does it need YOUR current or private facts?</text>
+        <rect x="40" y="48" width="230" height="56" rx="12" fill="#06B6D4"/>
+        <text class="apT" x="58" y="72" style="fill:#053640">Prompt it</text>
+        <text class="apS" x="58" y="90" style="fill:#053640;opacity:.9">no -&gt; free, instant, first resort</text>
+        <line class="apA" x1="155" y1="104" x2="155" y2="132"/>
+        <text class="apX" x="175" y="126">need current/private facts?</text>
+        <rect x="40" y="136" width="230" height="56" rx="12" fill="#6D28D9"/>
+        <text class="apT" x="58" y="160">Add RAG</text>
+        <text class="apS" x="58" y="178">retrieve YOUR docs into context</text>
+        <text class="apQ" x="330" y="34">Need one consistent style/format at scale?</text>
+        <rect x="330" y="48" width="250" height="56" rx="12" fill="#7C3AED"/>
+        <text class="apT" x="348" y="72">Fine-tune</text>
+        <text class="apS" x="348" y="90">retrain on your examples - $$, slow</text>
+        <rect x="330" y="136" width="250" height="56" rx="12" fill="#4C1D95"/>
+        <text class="apT" x="348" y="160">Almost everything else</text>
+        <text class="apS" x="348" y="178">a better prompt + RAG wins - cheaper</text>
+        <text class="apX" x="620" y="120">Order of resort:</text>
+        <text class="apX" x="620" y="142">1. prompt  2. RAG</text>
+        <text class="apX" x="620" y="164">3. fine-tune (last)</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - cheapest tool that clears the bar, escalate only if it does not</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The three tools, and when each earns its cost<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Prompting</strong> - free, instant, no infrastructure. Your first resort for nearly everything. Most "we need a custom model" problems are actually "we need a better prompt".</li>
+          <li><strong>RAG</strong> (Session 5) - retrieve your own documents and feed them into the context so the model answers from your facts, not its training. The enterprise default for "answer from our knowledge". Grounding beats guessing.</li>
+          <li><strong>Fine-tuning</strong> - actually retrain the model on your examples. Expensive, slow, and worth it mainly for a consistent style or output format at high volume (not for teaching it facts - RAG does that better and stays current).</li>
+          <li><strong>The trap:</strong> jumping to fine-tuning for a facts problem. Facts change; a fine-tuned model goes stale, while RAG just retrieves the latest. Match the tool to the need.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          When a team proposes fine-tuning, ask two questions: "did a strong prompt fail?" and "is this about style or facts?" If facts, it is RAG. Fine-tuning is the answer surprisingly rarely, and it is the most expensive answer to be wrong about.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Cost and latency literacy<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two numbers govern any GenAI feature in production. <strong>Cost</strong>: you pay per token (in and out), so a chatty prompt or a huge retrieved context costs real money at scale - a feature that is fine in a demo can be ruinous at a million calls a day. <strong>Latency</strong>: bigger models are slower; a user waiting 8 seconds for a reply may churn. The practitioner move is to match model size to task - a small fast model for routing and simple replies, a large one only for the genuinely hard step - and to trim context to what is needed. "Which model?" is a cost/latency/quality tradeoff, not "always the biggest".</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: AGENTS + EVALS ============ -->
+  <section class="section" id="agents-evals">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · steps and standards</span>
+      <h2>Agents, tools, and knowing it works <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">An agent is an LLM that can call tools (search, a calculator, your APIs) and take several steps toward a goal instead of answering in one shot. Powerful - and it multiplies the failure modes, so it needs guardrails. And underneath all of it sits the discipline nobody demos but everybody needs: evals. You cannot ship what you cannot measure.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An agent loop of think, pick tool, act, observe, with an eval gate before trusting output">
+        <style>
+          .agT { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .agX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .agE { font: 700 13px Inter, sans-serif; fill: #053640; }
+          .agA { stroke: #CFC9E6; stroke-width: 2.5; fill: none; marker-end: url(#agAh); }
+        </style>
+        <defs>
+          <marker id="agAh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <rect x="60" y="40" width="150" height="46" rx="11" fill="#6D28D9"/>
+        <text class="agT" x="78" y="68">Think / plan</text>
+        <rect x="300" y="40" width="150" height="46" rx="11" fill="#7C3AED"/>
+        <text class="agT" x="318" y="68">Pick a tool</text>
+        <rect x="540" y="40" width="150" height="46" rx="11" fill="#6D28D9"/>
+        <text class="agT" x="558" y="68">Act (call it)</text>
+        <rect x="300" y="130" width="150" height="46" rx="11" fill="#7C3AED"/>
+        <text class="agT" x="318" y="158">Observe result</text>
+        <line class="agA" x1="210" y1="63" x2="298" y2="63"/>
+        <line class="agA" x1="450" y1="63" x2="538" y2="63"/>
+        <line class="agA" x1="615" y1="86" x2="440" y2="130"/>
+        <line class="agA" x1="360" y1="130" x2="200" y2="86"/>
+        <text class="agX" x="150" y="112">loop until goal met (or it gets stuck)</text>
+        <rect x="540" y="130" width="230" height="46" rx="11" fill="#06B6D4"/>
+        <text class="agE" x="558" y="152">EVAL GATE</text>
+        <text class="agE" x="558" y="169" style="font-weight:400;font-size:11px">test before you trust the output</text>
+        <line class="agA" x1="450" y1="153" x2="538" y2="153"/>
+        <text class="agX" x="60" y="210">More power, more failure modes: it can loop, misuse a tool, or compound a small error. Guardrails + evals are not optional.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the agent loop, and the gate that keeps it honest</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Agents add power and risk; evals add trust<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Agents can do multi-step work</strong> - search, then read, then draft, then send - by calling tools between reasoning steps. This is how GenAI reaches beyond one reply into real tasks.</li>
+          <li><strong>They also fail in new ways:</strong> looping without finishing, calling the wrong tool, or compounding an early mistake across steps. Give them limited tools, step caps, and human approval on anything irreversible.</li>
+          <li><strong>Evals are how you know it works.</strong> A set of test cases with known-good answers, run every time you change the prompt or model, plus human review on a sample. "It looked great in the demo" is not an eval.</li>
+          <li><strong>Measure before and after every change.</strong> A prompt tweak that helps one case can quietly break ten others. Without an eval set you are flying blind.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The teams shipping reliable GenAI features are not the ones with the cleverest prompts - they are the ones with an eval set of 50-200 real cases they run on every change, tracking a quality score over time. It is the unglamorous habit (straight out of the data-literacy lifecycle) that turns a flashy demo into a dependable product.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What an eval actually looks like<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>An eval is a small, curated test set: real inputs paired with what a good output looks like (or a rule for judging one). You run the whole set on every prompt or model change and get a score - percent correct, or a rubric rating from a human or a second model acting as judge. For a support-reply bot, that might be 100 real tickets with model answers rated on accuracy, tone, and whether they leaked anything they should not. The point is a number that moves when quality moves, so decisions ("ship the new prompt?", "switch models?") stop being vibes. This is the same act as train/test from the data-literacy course, applied to GenAI.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>Weak prompt, strong prompt <span class="tag demo">★ 10 min · everyone compares</span></h2>
+    </div>
+    <p class="lede">Same model, same task - only the prompt changes. Flip between the weak and strong version and watch the output transform. Then rewrite one of your own real prompts as a spec.</p>
+    <div class="widget" data-widget="promptlab" data-config='{"title": "★ Prompt lab - same task, weak vs strong prompt", "intro": "Pick a task, then flip between the weak and strong prompt. Same model - the spec does all the work."}'></div>
+    <div class="steps">
+      <div class="step"><p>For each task, read the weak output, then flip to the strong prompt and its output. Name what the strong prompt added (role, length, audience, constraints, banned words, format).</p></div>
+      <div class="step"><p>Extract the pattern into your own words - the five parts from Part 1.</p></div>
+      <div class="step"><p>Take a prompt you actually used this week and rewrite it as a spec. Share one before/after.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Pick the approach <span class="tag demo">★ 6 min · everyone decides</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Four scenarios: (a) answer employee questions from our internal wiki, (b) always write in our exact brand voice, (c) a one-off summary of a report, (d) analyze this quarter's numbers.</p></div>
+      <div class="step"><p>For each, choose prompt / RAG / fine-tune and justify with the Part 2 rule (current-or-private facts -&gt; RAG; consistent style at scale -&gt; fine-tune; else -&gt; prompt).</p></div>
+      <div class="step"><p>Expected: (a) RAG, (b) fine-tune candidate, (c) prompt, (d) prompt with the numbers pasted in (grounding). Debate the close calls.</p></div>
+      <div class="step"><p>Note which of your own real use cases were secretly "just prompt it better" all along.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>Design an eval <span class="tag demo">★ 6 min · everyone specs</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Pick one GenAI use case from your world (a drafting bot, a summarizer, a classifier).</p></div>
+      <div class="step"><p>Define its eval: what test cases (how many, drawn from where), who or what judges them, and what bar it must clear to ship.</p></div>
+      <div class="step"><p>Name the failure you most need to catch (wrong facts? wrong tone? leaked data?) and make sure a test case covers it.</p></div>
+      <div class="step"><p>Write one sentence: "We ship this when ___ % of ___ cases pass ___ review." That sentence is the difference between a demo and a product.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>"It seemed fine when I tried it" is how bad GenAI features reach customers. A 50-case eval run before every change catches the regressions your spot-check never will - the same act as testing any other software, just newer.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Rewrite three real prompts</strong> you use as full specs (role, task, constraints, format). Keep the good ones - you are starting a prompt library.</li>
+      <li><strong>Run the approach test</strong> on one AI idea from your Session 1 list: is it really prompt, RAG, or fine-tune? Be honest about defaulting to the cheapest that works.</li>
+      <li><strong>Read the self-study cards</strong> above: system vs user prompts, cost/latency literacy, and what an eval looks like.</li>
+      <li><strong>Optional deep end:</strong> sketch a 10-case eval for one use case - real inputs plus what a good answer looks like. You now have the seed of a real quality process.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What makes a prompt strong?</p>
+      <button class="qopt" type="button">A · Secret keywords that unlock hidden model power</button>
+      <button class="qopt" type="button">B · A clear specification - role, task, context, constraints, and output format (plus examples)</button>
+      <button class="qopt" type="button">C · Making it as long as possible</button>
+      <p class="qwhy">A prompt is a brief, not an incantation. Naming the role, constraints and format does the work; examples steer hardest. Length for its own sake does not help.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · You need an assistant that answers from your company's current internal docs. Best approach?</p>
+      <button class="qopt" type="button">A · Fine-tune a model on the docs so it memorizes them</button>
+      <button class="qopt" type="button">B · Hope the base model already knows your company</button>
+      <button class="qopt" type="button">C · RAG - retrieve the relevant docs and feed them into the prompt so answers stay grounded and current</button>
+      <p class="qwhy">Facts that change belong in RAG, not fine-tuning. Retrieval always uses the latest docs; a fine-tuned model goes stale the moment a doc updates.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · What is an eval and why do you need one?</p>
+      <button class="qopt" type="button">A · A test set of real cases with known-good answers, run on every change, so quality is a number you can trust - not a vibe</button>
+      <button class="qopt" type="button">B · A one-time demo to leadership</button>
+      <button class="qopt" type="button">C · The model grading its own homework with no oversight</button>
+      <p class="qwhy">Evals turn "seemed fine" into a measured score that catches regressions when you tweak a prompt or swap a model. You cannot ship what you cannot measure.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">Leaders get the judgment; practitioners get the Self-study lane and the patterns to apply Monday.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Prompting as specification</span><span class="note">role/task/context/constraints/format + few-shot - Part 1 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Prompt vs RAG vs fine-tune</span><span class="note">the decision tree and the fine-tuning trap - Part 2 + Apply-along 2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Agents + tools, and evals</span><span class="note">the agent loop, guardrails, test-before-trust - Part 3 + Apply-along 3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">System vs user prompts, prompts as assets</span><span class="note">self-study card - the builder's layer</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Cost + latency literacy</span><span class="note">self-study card - matching model size to task</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 7 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Prompt = spec</b><span>Role · task · context · constraints · format. Plus 1-2 examples (few-shot). A brief for a brilliant, literal new hire.</span></div>
+      <div class="cheat-item"><b>Order of resort</b><span>1. Prompt (free) · 2. RAG (ground in your data) · 3. Fine-tune (last, expensive).</span></div>
+      <div class="cheat-item"><b>RAG vs fine-tune</b><span>Facts that change -&gt; RAG. Consistent style/format at scale -&gt; fine-tune. Most needs -&gt; a better prompt.</span></div>
+      <div class="cheat-item"><b>Agents</b><span>LLM + tools + multiple steps. More power, more failure modes. Limit tools, cap steps, approve the irreversible.</span></div>
+      <div class="cheat-item"><b>Evals</b><span>Real cases + known-good answers, run on every change. A number, not a vibe. You cannot ship what you cannot measure.</span></div>
+      <div class="cheat-item"><b>Cost + latency</b><span>Pay per token; bigger = slower. Match model size to task; trim context. Not "always the biggest".</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 7 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="08-ai-strategy-and-risk.html">Next: AI strategy and risk →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 6 · How LLMs work - learn AI literacy with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-ai-literacy-with-phoebe</a> / Session 6 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn AI Literacy with Phoebe · Session 6 of 8</div>
+    <h1>How LLMs work: <span class="accent">a next-word machine</span></h1>
+    <p class="sub">The models behind ChatGPT and Claude feel like magic, so people either over-trust or dismiss them. Both are expensive mistakes. This session opens the box: an LLM predicts the next token from a probability list, over and over. Understand that one loop and everything - context windows, temperature, and why they confidently make things up - stops being mysterious.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Stretch</span>
+      <span class="chip audience">Leaders &amp; practitioners</span>
+      <span class="chip audience">No code</span>
+      <span class="chip time">45 min live + self-study</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Concepts</span>
+      <span class="a3" style="flex:5">18-40 · Apply-along</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The demystifying session</h2>
+    </div>
+    <p class="lede">Everything you have built so far - neural nets (S2), embeddings (S3), retrieval (S5) - comes together here. A large language model is a very large neural net that turns text into tokens, into vectors, and predicts what comes next. No lookup, no database of answers, no understanding in the human sense. Just a staggeringly good next-token guesser. That framing is the difference between using these tools well and being fooled by them.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - practitioner depth</span>
+      <span class="pill amber">★ Apply-along - interactive, everyone plays</span>
+      <span class="pill inkpill">Sequel to learn-data-literacy</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The one-sentence truth of how an LLM works (predict the next token, repeat), a working feel for the two dials you actually control - context window and temperature - and a clear-eyed understanding of why hallucination is baked into the design, so you stop expecting it to behave like a database.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: NEXT TOKEN ============ -->
+  <section class="section" id="next-token">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · the whole trick</span>
+      <h2>Next-token prediction <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Give the model the text so far. It produces a probability for every possible next token (a token is a word or word-piece), picks one, appends it, and runs again. That loop, scaled to billions of parameters trained on much of the internet, is the entire mechanism. It is not retrieving a stored answer - it is predicting, token by token.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A sentence stem followed by a bar chart of next-token probabilities">
+        <style>
+          .ntH { font: 700 15px Inter, sans-serif; fill: #1E1B2E; }
+          .ntM { font: 600 13px "SF Mono", Menlo, monospace; fill: #1E1B2E; }
+          .ntL { font: 600 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .ntX { font: 400 12.5px Inter, sans-serif; fill: #6B6785; }
+        </style>
+        <text class="ntH" x="40" y="40">Given: </text>
+        <rect x="110" y="24" width="330" height="26" rx="7" fill="#EDE9FE"/>
+        <text class="ntM" x="124" y="42">The weather today is ___</text>
+        <text class="ntX" x="460" y="42">predict the next token:</text>
+        <rect x="110" y="70" width="255" height="24" rx="6" fill="#6D28D9"/>
+        <text class="ntL" x="122" y="87">sunny</text>
+        <text class="ntX" x="378" y="87">34%</text>
+        <rect x="110" y="102" width="165" height="24" rx="6" fill="#7C3AED"/>
+        <text class="ntL" x="122" y="119">cold</text>
+        <text class="ntX" x="288" y="119">22%</text>
+        <rect x="110" y="134" width="135" height="24" rx="6" fill="#7C3AED"/>
+        <text class="ntL" x="122" y="151">warm</text>
+        <text class="ntX" x="258" y="151">18%</text>
+        <rect x="110" y="166" width="105" height="24" rx="6" fill="#C4B5FD"/>
+        <text class="ntX" x="122" y="183" style="fill:#1E1B2E">rainy</text>
+        <text class="ntX" x="228" y="183">14%</text>
+        <rect x="110" y="198" width="90" height="24" rx="6" fill="#C4B5FD"/>
+        <text class="ntX" x="122" y="215" style="fill:#1E1B2E">nice</text>
+        <text class="ntX" x="213" y="215">12%</text>
+        <rect x="560" y="90" width="280" height="110" rx="12" fill="#06B6D4"/>
+        <text class="ntL" x="580" y="120" style="fill:#053640;font-weight:700">Pick one -&gt; append -&gt; repeat</text>
+        <text class="ntL" x="580" y="146" style="fill:#053640">"The weather today is sunny"</text>
+        <text class="ntL" x="580" y="170" style="fill:#053640">then predict the NEXT token,</text>
+        <text class="ntL" x="580" y="188" style="fill:#053640">and the next, forever.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - one prediction step; a whole answer is thousands of these</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Predicting, not retrieving<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>A token is a word chunk.</strong> "unbelievable" might be un + believ + able. The model works in tokens, not letters or whole words - which is why it can miscount the letters in a word (self-study).</li>
+          <li><strong>Every step is a probability list.</strong> The model does not "know" the answer; it computes how likely each token is to come next given everything so far, then samples one.</li>
+          <li><strong>Fluency is the point, not a side effect.</strong> It was trained to make text that sounds like its training data. Sounding right and being right are different goals - hold onto that for Part 3.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Autocomplete on your phone is a tiny version of the same idea: it guesses your next word from the last few. An LLM is that, scaled up by a factor of billions and fed the internet - enough that "guess the next token" produces essays, code, and arguments. Same loop, wildly different scale.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Tokens vs words, and the "strawberry" trap<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Ask some models "how many r's in strawberry?" and they stumble. Not because they are dumb - because they never see letters. Text is chopped into tokens before the model sees it, so "strawberry" might arrive as a few chunks with no letter-level view. Counting characters is genuinely hard for a system that thinks in tokens. The lesson for practitioners: LLMs are weak exactly where the task lives below the token (spelling, arithmetic digit-by-digit, exact character edits) - route those to a tool (Session 7's agents) instead of trusting the model.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: TRAINING, CONTEXT, TEMPERATURE ============ -->
+  <section class="section" id="dials">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · what you actually control</span>
+      <h2>Training vs inference, context, temperature <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">Two moments matter: training (once, expensive, bakes patterns into the weights) and inference (every time you prompt it). At inference you control two dials that decide almost everything about the output: how much it can see (context window) and how boldly it strays from the safest token (temperature).</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Training bakes weights once; inference uses them on each prompt">
+        <style>
+          .tiT { font: 700 14px Inter, sans-serif; fill: #FFFFFF; }
+          .tiS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .9; }
+          .tiH { font: 700 13px Inter, sans-serif; fill: #1E1B2E; }
+          .tiX { font: 400 12px Inter, sans-serif; fill: #6B6785; }
+          .tiA { stroke: #CFC9E6; stroke-width: 3; fill: none; marker-end: url(#tiAh); }
+        </style>
+        <defs>
+          <marker id="tiAh" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <text class="tiH" x="40" y="34">TRAINING · once, months, millions of dollars</text>
+        <rect x="40" y="46" width="220" height="56" rx="12" fill="#4C1D95"/>
+        <text class="tiT" x="58" y="70">Most of the internet</text>
+        <text class="tiS" x="58" y="88">books, code, web, forums</text>
+        <line class="tiA" x1="262" y1="74" x2="330" y2="74"/>
+        <rect x="333" y="46" width="200" height="56" rx="12" fill="#6D28D9"/>
+        <text class="tiT" x="351" y="70">Frozen weights</text>
+        <text class="tiS" x="351" y="88">patterns baked in, fixed</text>
+        <text class="tiH" x="40" y="146">INFERENCE · every prompt, seconds, cents</text>
+        <rect x="40" y="158" width="200" height="56" rx="12" fill="#7C3AED"/>
+        <text class="tiT" x="58" y="182">Your prompt</text>
+        <text class="tiS" x="58" y="200">+ context window (memory)</text>
+        <line class="tiA" x1="242" y1="186" x2="310" y2="186"/>
+        <rect x="313" y="158" width="200" height="56" rx="12" fill="#7C3AED"/>
+        <text class="tiT" x="331" y="182">Frozen weights run</text>
+        <text class="tiS" x="331" y="200">temperature sets boldness</text>
+        <line class="tiA" x1="515" y1="186" x2="583" y2="186"/>
+        <rect x="586" y="158" width="200" height="56" rx="12" fill="#06B6D4"/>
+        <text class="tiT" x="604" y="182" style="fill:#053640">Tokens out</text>
+        <text class="tiS" x="604" y="200" style="fill:#053640;opacity:.9">your answer, one at a time</text>
+        <text class="tiX" x="586" y="120">The weights never change when you chat.</text>
+        <text class="tiX" x="586" y="138">"Learning from our chat" is a myth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - trained once, used endlessly; only the prompt and dials change per call</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Context and temperature, in plain terms<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Context window = short-term memory.</strong> Everything the model can "see" at once - your prompt, the conversation, any documents you paste. Past the limit, earlier content falls out of view. Bigger windows (now hundreds of pages) changed what is possible, but they are not infinite and cost more.</li>
+          <li><strong>Temperature = boldness.</strong> Low temperature almost always grabs the top token (focused, repetitive, good for facts). High temperature flattens the odds so unlikely tokens can win (creative, surprising, riskier). You will feel this in the widget.</li>
+          <li><strong>The weights are frozen at inference.</strong> ChatGPT does not learn from your conversation in real time. Genuinely updating the model means retraining or fine-tuning (Session 7) - a deliberate, separate act.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The exec move</strong>
+          When output is too samey, raise temperature; too wild or off-task, lower it. When it "forgets" what you said earlier, you have hit the context window - not a bug, a budget. Both are dials, not defects.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the model does not know last week's news<span class="mini">2 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Training has a cutoff date - the model only saw data up to some point, then its weights froze. Anything after that simply is not in there. That is why models get recent events wrong or refuse them, and why grounding matters: to answer about your latest data or today's news, you feed it in at inference time via the context window (paste it, or retrieve it with RAG from Session 5). The model supplies fluency and reasoning-shaped patterns; you supply the current facts. Confusing "it was trained on a lot" with "it knows everything now" is a top source of trust errors.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: HALLUCINATION ============ -->
+  <section class="section" id="hallucination">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · the built-in failure</span>
+      <h2>Why they hallucinate <span class="tag concept">5 min live</span></h2>
+    </div>
+    <p class="lede">A hallucination is a confident, fluent, wrong answer. It happens because the model optimizes for plausible next tokens, not for truth - and it has no built-in fact-checker. When it does not "know", it does not stop; it generates the most likely-sounding continuation, which can be a convincing fabrication. This is a property of the mechanism, not a bug you can fully patch. So you design around it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A fluent but false answer, with three mitigations branching off">
+        <style>
+          .haT { font: 700 13.5px Inter, sans-serif; fill: #FFFFFF; }
+          .haS { font: 400 11.5px Inter, sans-serif; fill: #FFFFFF; opacity: .92; }
+          .haX { font: 400 12.5px Inter, sans-serif; fill: #6B6785; }
+          .haA { stroke: #CFC9E6; stroke-width: 2.5; fill: none; marker-end: url(#haAh); }
+        </style>
+        <defs>
+          <marker id="haAh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none" stroke="#CFC9E6" stroke-width="1.5"/>
+          </marker>
+        </defs>
+        <rect x="40" y="90" width="250" height="70" rx="12" fill="#B42318"/>
+        <text class="haT" x="58" y="118">"Fluent but false"</text>
+        <text class="haS" x="58" y="138">confident cited case that</text>
+        <text class="haS" x="58" y="154">never existed</text>
+        <text class="haX" x="40" y="196">Optimizes plausibility, not truth. No internal fact-checker.</text>
+        <line class="haA" x1="290" y1="106" x2="360" y2="70"/>
+        <line class="haA" x1="290" y1="125" x2="360" y2="125"/>
+        <line class="haA" x1="290" y1="144" x2="360" y2="180"/>
+        <rect x="363" y="44" width="300" height="52" rx="11" fill="#6D28D9"/>
+        <text class="haT" x="381" y="66">Ground it (RAG)</text>
+        <text class="haS" x="381" y="84">feed real documents at inference - Session 5</text>
+        <rect x="363" y="102" width="300" height="52" rx="11" fill="#7C3AED"/>
+        <text class="haT" x="381" y="124">Human in the loop</text>
+        <text class="haS" x="381" y="142">a person checks before it counts</text>
+        <rect x="363" y="160" width="300" height="52" rx="11" fill="#06B6D4"/>
+        <text class="haT" x="381" y="182" style="fill:#053640">Evals</text>
+        <text class="haS" x="381" y="200" style="fill:#053640;opacity:.9">test against known answers - Session 7</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - you do not cure hallucination, you contain it</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Design around it, do not wish it away<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Fluent and confident is not evidence.</strong> The model has the same smooth tone whether it is right or inventing. Never read confidence as accuracy.</li>
+          <li><strong>Ground it.</strong> Give the model the real facts in the prompt (paste them, or retrieve with RAG). It is far more reliable summarizing what you handed it than recalling from training.</li>
+          <li><strong>Keep a human on high-stakes output.</strong> Legal, medical, financial, anything published in your name - a person verifies before it counts. Session 8 makes this a governance rule.</li>
+          <li><strong>Measure it.</strong> Evals (Session 7) tell you the real error rate on your task, so "seems fine" becomes a number you can manage.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>In 2023 two lawyers filed a brief citing six court cases an LLM had invented, complete with fake quotes and citation numbers. The model was not malfunctioning - it produced plausible-looking legal text, which is exactly what it does. The failure was trusting fluency without verification. A grounding step or a human check would have caught all six.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Transformers and attention, in one honest paragraph<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The architecture behind modern LLMs is the <strong>transformer</strong> (2017, "Attention Is All You Need"). Its key trick is <strong>attention</strong>: for each token it is about to predict, the model weighs which earlier tokens matter most and how they relate - so "it" in a sentence can attend to the noun it refers to twenty words back. Stacking many attention layers lets the model track long-range structure in language, which is why transformers blew past the older sequence models (RNNs/LSTMs) that struggled to remember far back. You do not need the math; you need the intuition: attention is the mechanism that lets a next-token predictor stay coherent across a long passage. That coherence is why it feels like understanding - and why it is easy to over-trust.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO 1 ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 1 of 3</span>
+      <h2>Be the LLM <span class="tag demo">★ 10 min · everyone plays</span></h2>
+    </div>
+    <p class="lede">Build a sentence one token at a time, straight from the probability list - then move the temperature dial and watch the odds change shape. This is the whole mechanism in your hands.</p>
+    <div class="widget" data-widget="tokenpredictor" data-config='{"title": "★ Be the LLM - pick the next token, feel the temperature", "intro": "Choose a sentence start, then pick tokens from the probability list. Slide temperature and watch the odds sharpen or flatten."}'></div>
+    <div class="callout tip">
+      <strong>The debrief</strong>
+      At low temperature the top token dominates - predictable, safe, a little boring. Crank it up and long-shot tokens start winning: more creative, and exactly where nonsense sneaks in. You just felt the dial behind both "why is it so bland?" and "why did it make that up?".
+    </div>
+  </section>
+
+  <!-- ============ DEMO 2 ============ -->
+  <section class="section" id="demo-2">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 2 of 3</span>
+      <h2>Rank the hallucination risk <span class="tag demo">★ 6 min · everyone judges</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Four tasks: (a) summarize a document you paste in, (b) cite a specific court case from memory, (c) brainstorm 20 product names, (d) state a medication dose.</p></div>
+      <div class="step"><p>Rank them by hallucination danger. Ask for each: is the model grounded in facts you gave it, or recalling from training? Is the output verifiable? What is the cost of being wrong?</p></div>
+      <div class="step"><p>Land the pattern: grounded + low-stakes + easy-to-verify (summary, brainstorm) is safe; recall + high-stakes + hard-to-verify (case citation, dose) is dangerous - and needs grounding plus a human.</p></div>
+      <div class="step"><p>Map one real task from your work onto this spectrum. Decide its guardrail now.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO 3 ============ -->
+  <section class="section" id="demo-3">
+    <div class="section-kicker">
+      <span class="klabel">Apply-along 3 of 3</span>
+      <h2>Budget the context window <span class="tag demo">★ 6 min · everyone plans</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step"><p>Take a real big-input task: "analyze this 100-page contract" or "answer from our 500-page handbook".</p></div>
+      <div class="step"><p>The whole thing will not fit in one context window. List your options: paste the most relevant sections only, or retrieve the right chunks on demand (RAG, Session 5) and feed just those.</p></div>
+      <div class="step"><p>Notice the realization: the quality ceiling is set by which chunks you retrieve, not by the model. Retrieval quality = answer quality.</p></div>
+      <div class="step"><p>Write one line: for your task, how would you get the right few pages in front of the model? That sentence is your S7 starting point.</p></div>
+    </div>
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p>"We fed the AI our whole wiki and it still gave wrong answers" almost always means the retrieval picked the wrong chunks, not that the model is weak. The context window is a small stage - what you put on it is the job.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">After the session</span>
+      <h2>This week <span class="tag exercise">◐ 25 min total</span></h2>
+    </div>
+    <ul>
+      <li><strong>Temperature test:</strong> in any chatbot, ask the same creative question twice, once asking for a "safe, standard" answer and once for a "bold, unusual" one. Feel the dial in real output.</li>
+      <li><strong>Catch a hallucination:</strong> ask a model for five specific facts you can verify (citations, dates, statistics). Check them. Note how confident the wrong ones sounded.</li>
+      <li><strong>Read the self-study cards</strong> above: tokens vs words, the training cutoff, and transformers/attention.</li>
+      <li><strong>Optional deep end:</strong> skim the "Attention Is All You Need" abstract (2017) - you will recognize every idea from Part 3's self-study card.</li>
+    </ul>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · At its core, what does a large language model actually do?</p>
+      <button class="qopt" type="button">A · Looks up the best stored answer in a giant database</button>
+      <button class="qopt" type="button">B · Predicts the next token from a probability list, then repeats - over and over</button>
+      <button class="qopt" type="button">C · Reasons about facts the way a person does</button>
+      <p class="qwhy">It is a next-token predictor scaled up enormously. No lookup, no stored answers, no human-style reasoning - just probability over the next chunk of text, again and again.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Output is coming out bland and repetitive. Which dial do you reach for?</p>
+      <button class="qopt" type="button">A · Enlarge the context window</button>
+      <button class="qopt" type="button">B · Retrain the model</button>
+      <button class="qopt" type="button">C · Raise the temperature so it strays further from the single most likely token</button>
+      <p class="qwhy">Temperature is boldness. Low = safe and samey, high = creative and riskier. Context window is about how much it can see, not how adventurous it is.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why do LLMs hallucinate confident, wrong answers?</p>
+      <button class="qopt" type="button">A · They optimize for plausible-sounding next tokens, not truth, and have no built-in fact-checker</button>
+      <button class="qopt" type="button">B · They are broken and a patch will soon fix it entirely</button>
+      <button class="qopt" type="button">C · Only cheap models do this; expensive ones never hallucinate</button>
+      <p class="qwhy">Hallucination is a property of how the mechanism works. Bigger models hallucinate less but never zero. You contain it with grounding, human review, and evals.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Source material</span>
+      <h2>Concepts covered &amp; where they come from</h2>
+    </div>
+    <p class="lede">Leaders get the working model; practitioners get the Self-study lane and the names to go deeper.</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Next-token prediction</span><span class="note">the core loop, tokens, sampling - Part 1 + Apply-along 1</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Training vs inference, context window, temperature</span><span class="note">the two dials you control - Part 2 + Apply-alongs 1 and 3</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hallucination and its three mitigations</span><span class="note">why it happens, RAG / human / evals - Part 3 + Apply-along 2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Transformers &amp; attention (2017)</span><span class="note">self-study card - the architecture, practitioner depth</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Tokens vs words, training cutoff</span><span class="note">self-study cards - where the model is structurally weak</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The whole trick</b><span>Predict the next token from a probability list, append it, repeat. Not lookup, not understanding - prediction at scale.</span></div>
+      <div class="cheat-item"><b>Tokens</b><span>Text is chopped into word-pieces before the model sees it. That is why it miscounts letters - route spelling/math to a tool.</span></div>
+      <div class="cheat-item"><b>Training vs inference</b><span>Trained once (frozen weights); used every prompt. It does not learn from your chat in real time.</span></div>
+      <div class="cheat-item"><b>Two dials</b><span>Context window = how much it can see at once. Temperature = how boldly it strays from the top token.</span></div>
+      <div class="cheat-item"><b>Hallucination</b><span>Optimizes plausibility, not truth. Fluent + confident does not mean correct. Built-in, not a bug.</span></div>
+      <div class="cheat-item"><b>Contain it</b><span>Ground it (RAG), keep a human on high stakes, and measure with evals. You do not cure it - you design around it.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Session 6 of 8 · learn-ai-literacy-with-phoebe · by Phoebe Fu</span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="07-using-genai-well.html">Next: Using GenAI well →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/widgets.js?v=1"></script>
+</body>
+</html>

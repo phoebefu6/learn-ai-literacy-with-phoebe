@@ -45,6 +45,17 @@
   .path .pstep:hover { background: var(--indigo); color: #fff; }
   .path .parr { color: var(--faint); font-weight: 700; }
 
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff, #F6FAFD); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
   .isnot { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 2.6rem; }
   .isnot .half { border: 1px solid var(--hairline); border-radius: var(--radius); padding: 1.1rem 1.3rem; background: #fff; }
   .isnot .half h3 { font-size: .95rem; font-weight: 800; margin-bottom: .4rem; }
@@ -74,6 +85,12 @@
 </header>
 
 <main class="wrap">
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">The whole course at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
   <section class="section">
     <div class="course-grid">
       <a class="course-card" href="courses/01-what-ai-is.html" style="--diff:#34D399">
@@ -189,6 +206,55 @@
   </footer>
 </main>
 
+<script>
+window.MINDMAP_DATA = {
+  title: "AI\nLiteracy",
+  centerColor: "#4C1D95",
+  sessions: [
+    { label: "What AI\nactually is", href: "courses/01-what-ai-is.html", color: "#34D399",
+      concepts: [
+        { label: "Nested dolls", href: "courses/01-what-ai-is.html" },
+        { label: "Three eras", href: "courses/01-what-ai-is.html" },
+        { label: "Right-tool test", href: "courses/01-what-ai-is.html" } ] },
+    { label: "Neural nets", href: "courses/02-neural-nets.html", color: "#34D399",
+      concepts: [
+        { label: "The neuron", href: "courses/02-neural-nets.html" },
+        { label: "Layers", href: "courses/02-neural-nets.html" },
+        { label: "Training", href: "courses/02-neural-nets.html" } ] },
+    { label: "Embeddings", href: "courses/03-embeddings.html", color: "#FBBF24",
+      concepts: [
+        { label: "Vectors", href: "courses/03-embeddings.html" },
+        { label: "Similarity", href: "courses/03-embeddings.html" },
+        { label: "Meaning-space", href: "courses/03-embeddings.html" } ] },
+    { label: "Recommend-\nations", href: "courses/04-recommendations.html", color: "#FBBF24",
+      concepts: [
+        { label: "Collaborative", href: "courses/04-recommendations.html" },
+        { label: "Content-based", href: "courses/04-recommendations.html" },
+        { label: "Cold start", href: "courses/04-recommendations.html" } ] },
+    { label: "Search &\nranking", href: "courses/05-search-and-ranking.html", color: "#FBBF24",
+      concepts: [
+        { label: "Semantic search", href: "courses/05-search-and-ranking.html" },
+        { label: "Signal ranking", href: "courses/05-search-and-ranking.html" },
+        { label: "RAG intro", href: "courses/05-search-and-ranking.html" } ] },
+    { label: "How LLMs\nwork", href: "courses/06-how-llms-work.html", color: "#FB923C",
+      concepts: [
+        { label: "Next-token", href: "courses/06-how-llms-work.html" },
+        { label: "Context window", href: "courses/06-how-llms-work.html" },
+        { label: "Temperature", href: "courses/06-how-llms-work.html" } ] },
+    { label: "Using\nGenAI well", href: "courses/07-using-genai-well.html", color: "#FB923C",
+      concepts: [
+        { label: "Prompt patterns", href: "courses/07-using-genai-well.html" },
+        { label: "RAG grounding", href: "courses/07-using-genai-well.html" },
+        { label: "Evals", href: "courses/07-using-genai-well.html" } ] },
+    { label: "AI strategy\n& risk", href: "courses/08-ai-strategy-and-risk.html", color: "#F87171",
+      concepts: [
+        { label: "Build / buy / API", href: "courses/08-ai-strategy-and-risk.html" },
+        { label: "Five-risk grid", href: "courses/08-ai-strategy-and-risk.html" },
+        { label: "Scorecard", href: "courses/08-ai-strategy-and-risk.html" } ] }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
 <script src="assets/app.js?v=1"></script>
 </body>
 </html>

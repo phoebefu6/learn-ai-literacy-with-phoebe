@@ -23,11 +23,11 @@
   var n = data.sessions.length;
   // n-adaptive geometry: rings and canvas grow with session count so the same
   // renderer fits courses from 6 to 14+ sessions (keeps session nodes from crowding).
-  var STAGGER = 44;                          // odd twigs pushed out to form a 2nd row
-  var R1 = Math.max(150, Math.round(23 * n)); // session ring
-  var R2 = R1 + 145;                          // concept ring (base)
+  var STAGGER = 66;                          // odd twigs pushed out to form a 2nd row
+  var R1 = Math.max(170, Math.round(26 * n)); // session ring
+  var R2 = R1 + 205;                          // concept ring (base) - pushed out so dense fans do not collide
   var maxR = R2 + STAGGER;
-  var W = 2 * (maxR + 150), H = 2 * (maxR + 60), cx = W / 2, cy = H / 2;
+  var W = 2 * (maxR + 150), H = 2 * (maxR + 70), cx = W / 2, cy = H / 2;
   var angleStep = 360 / n;                    // degrees between sessions
 
   function el(name, attrs, text) {
@@ -94,8 +94,8 @@
     var cs = s.concepts || [];
     // spread never exceeds ~60% of the angular sector, so concept fans never cross into
     // a neighbouring session (matters for dense 9-14 session courses).
-    var base = cs.length > 2 ? 22 : (cs.length > 1 ? 26 : 0);
-    var spread = Math.min(base, angleStep * 0.6);
+    var base = cs.length > 2 ? 13 : (cs.length > 1 ? 20 : 0);
+    var spread = Math.min(base, angleStep * 0.42);
     var conceptEls = [];
     cs.forEach(function (c, j) {
       var off = (j - (cs.length - 1) / 2) * spread;
@@ -110,7 +110,7 @@
       edgeLayer.appendChild(twig);
       edges.push(twig);
       var cnode = node({
-        x: ccx, y: ccy, w: 128, h: 34, rx: 8,
+        x: ccx, y: ccy, w: 116, h: 34, rx: 8,
         fill: "#EAF2F8", color: "#16202B", fs: 11.5, fw: 600,
         stroke: s.color, strokeW: 1.5, label: c.label, href: c.href
       });

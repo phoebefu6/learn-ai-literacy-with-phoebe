@@ -1,3 +1,8 @@
+<!-- learn-with-phoebe hub banner -->
+> ### 📚 Part of [**Learn with Phoebe**](https://phoebefu6.github.io/learn-with-phoebe/)
+> The shelf of 20 free, hands-on courses on AI, data, and the craft around them. **[Browse every course ↗](https://phoebefu6.github.io/learn-with-phoebe/)**
+<!-- /learn-with-phoebe hub banner -->
+
 # learn-ai-literacy-with-phoebe
 
 Understand AI and decide with confidence. Eight 45-minute sessions - the sequel to learn-data-literacy - that take leaders and practitioners from neural nets to LLMs to AI strategy. Not how to build models, but what these systems actually do, why they work, where they fail, and when the answer is "do not use AI for this". Every session has one interactive AI toy and no code anywhere.
